@@ -1,0 +1,33 @@
+<html>
+    <div th:fragment="loginForm">
+        <div class="py-5 text-center">
+            <h2>Login form</h2>
+            <p class="lead">Login using your account details.</p>
+        </div>
+
+        <div class="inline-block col-sm-6 mx-auto">
+            <form action="#" class="needs-validation" novalidate th:action="@{/login}" th:object="${user}" method="post">
+                <div class="col-12">
+                    <label for="username" class="form-label">Username</label>
+                    <div class="input-group has-validation">
+                        <input type="text" class="form-control" id="username" placeholder="Username" required field="*{username}" name="username">
+                        <div class="invalid-feedback">
+                            Please enter your username.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" required field="*{password}" name="password">
+                    <div class="invalid-feedback">
+                        Please enter your password.
+                    </div>
+                </div>
+
+                <hr class="my-4">
+                <button class="w-100 btn btn-primary btn-lg" type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+</html>
