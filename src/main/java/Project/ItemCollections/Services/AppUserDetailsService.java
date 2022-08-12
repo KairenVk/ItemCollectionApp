@@ -1,5 +1,6 @@
-package Project.ItemCollections;
+package Project.ItemCollections.Services;
 
+import Project.ItemCollections.Security.AppUserDetails;
 import Project.ItemCollections.Entities.User;
 import Project.ItemCollections.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

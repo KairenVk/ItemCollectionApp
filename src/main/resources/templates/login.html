@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <title>Login</title>
+</head>
+<body class="bg-light">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div th:include="~{fragments/loginForm :: loginForm}"></div>
+            <div th:replace="~{fragments/footer :: footer}"></div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/css/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/css/form-validation.js}"></script>
+<script th:src="@{/css/sidebars.js}"></script>
+
+</body>
+</html>

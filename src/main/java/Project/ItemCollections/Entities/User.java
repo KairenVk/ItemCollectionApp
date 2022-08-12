@@ -1,16 +1,17 @@
 package Project.ItemCollections.Entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class User {
+public class User implements Serializable {
 
     @Id
     @Column (name = "user_id")
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="user_generator")
-    @SequenceGenerator(name="itemcollections", sequenceName ="user_seq")
+    @SequenceGenerator(name="user", sequenceName ="user_seq")
     private Integer id;
     @Column(unique = true)
     private String username;
@@ -19,13 +20,12 @@ public class User {
     private String password;
 
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-            )
-            private Set<Role> roles = new HashSet<>();
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<UsersRoles> userRoles;
+
+    public User() {
+        userRoles = new HashSet<>();
+    }
 
     public Integer getId() {
         return id;
@@ -59,11 +59,11 @@ public class User {
         this.password = password;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public Set<UsersRoles> getUserRoles() {
+        return userRoles;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setUserRoles(Set<UsersRoles> userRoles) {
+        this.userRoles = userRoles;
     }
 }

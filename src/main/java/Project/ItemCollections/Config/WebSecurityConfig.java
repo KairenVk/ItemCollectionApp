@@ -1,6 +1,7 @@
-package Project.ItemCollections;
+package Project.ItemCollections.Config;
 
 import Project.ItemCollections.Repositories.UserRepository;
+import Project.ItemCollections.Services.AppUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -55,7 +56,7 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/admin", true)
+                .defaultSuccessUrl("/main", true)
                 .permitAll()
                 .and()
                 .logout()

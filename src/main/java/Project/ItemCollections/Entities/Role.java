@@ -1,15 +1,20 @@
 package Project.ItemCollections.Entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Set;
 
 @Entity
-public class Role {
+public class Role implements Serializable {
     @Id
     @Column (name = "role_id")
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="role_generator")
-    @SequenceGenerator(name="itemcollections", sequenceName ="role_seq")
+    @SequenceGenerator(name="role", sequenceName ="role_seq")
     private Integer id;
-    private String name;
+    private String roleName;
+
+    @OneToMany(mappedBy="role")
+    Set<UsersRoles> userRoles;
 
     public Integer getId() {
         return id;
@@ -19,11 +24,11 @@ public class Role {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Set<UsersRoles> getUserRoles() {
+        return userRoles;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserRoles(Set<UsersRoles> userRoles) {
+        this.userRoles = userRoles;
     }
 }

@@ -1,8 +1,9 @@
-package Project.ItemCollections;
+package Project.ItemCollections.Security;
 
-import Project.ItemCollections.Entities.Role;
 import Project.ItemCollections.Entities.User;
 
+import Project.ItemCollections.Entities.UsersRoles;
+import Project.ItemCollections.Repositories.UsersRolesRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,10 +23,10 @@ public class AppUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<Role> roles = user.getRoles();
+        Set<UsersRoles> roles = user.getUserRoles();
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        for (Role role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        for (UsersRoles role : roles) {
+            authorities.add(new SimpleGrantedAuthority((role.toString())));
         }
         return authorities;
     }
