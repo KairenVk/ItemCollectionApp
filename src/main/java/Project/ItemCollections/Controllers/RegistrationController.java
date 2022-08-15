@@ -1,6 +1,6 @@
 package Project.ItemCollections.Controllers;
 
-import Project.ItemCollections.Entities.User;
+import Project.ItemCollections.Entities.User.User;
 import Project.ItemCollections.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
