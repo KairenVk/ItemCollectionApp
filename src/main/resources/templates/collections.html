@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <title>Collection</title>
+</head>
+<body class="bg-light">
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <a href="/collections/create" class="col-sm-1 btn btn-primary">New collection</a>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Topic</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="collection: ${collections}">
+                            <td><a th:href="@{/collections/{collectionId}(collectionId=${collection.id})}" th:text="${collection.name}"></a></td>
+                            <td th:text="${collection.description}"></td>
+                            <td th:text="${collection.collectionTopic.topicName}"></td>
+                            <td>
+                                <a th:href="@{/collections/{collectionId}/edit(collectionId=${collection.id})}">Edit</a>
+                                <a th:href="@{/collections/{collectionId}/delete(collectionId=${collection.id})}">Delete</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script th:src="@{/css/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/css/sidebars.js}"></script>
+</body>
+</html>

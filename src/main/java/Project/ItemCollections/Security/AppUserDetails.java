@@ -21,11 +21,11 @@ public class AppUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-//        Set<Role> roles = user.getRoles();
+        Set<Role> roles = user.getRoles();
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-//        for (Role role : roles) {
-//            authorities.add(new SimpleGrantedAuthority((role.toString())));
-//        }
+        for (Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority((role.toString())));
+        }
         return authorities;
     }
 

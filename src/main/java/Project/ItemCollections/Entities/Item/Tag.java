@@ -15,6 +15,22 @@ public class Tag {
     @ManyToMany(mappedBy = "itemTags")
     private Set<Item> items = new HashSet<>();
 
+    public Integer getTagWeight() {
+        return tagWeight;
+    }
+
+    public void setTagWeight(Integer tagWeight) {
+        this.tagWeight = tagWeight;
+    }
+
+    public Set<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(Set<Item> items) {
+        this.items = items;
+    }
+
     public Integer getId() {
         return id;
     }

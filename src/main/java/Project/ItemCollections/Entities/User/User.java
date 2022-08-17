@@ -1,6 +1,6 @@
 package Project.ItemCollections.Entities.User;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import Project.ItemCollections.Entities.Item.Item;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,14 +17,32 @@ public class User implements Serializable {
     private String username;
     private String email;
     private String password;
-    @ManyToMany(cascade = {CascadeType.ALL})
+
+    private Boolean blocked = false;
+
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(
-            name = "user_roles",
+            name = "users_roles",
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "role_id") }
     )
-
     private Set<Role> roles = new HashSet<>();
+
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_likes",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "item_id") }
+    )
+    private Set<Item> itemLikes = new HashSet<>();
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;
@@ -59,5 +77,25 @@ public class User implements Serializable {
     }
     public void addRole(Role role) {
             roles.add(role);
+    }
+
+    public Set<Item> getItemLikes() {
+        return itemLikes;
+    }
+
+    public void setItemLikes(Set<Item> itemLikes) {
+        this.itemLikes = itemLikes;
+    }
+
+    public void addItemLike(Item item) {
+        itemLikes.add(item);
+    }
+
+    public Boolean getBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(Boolean blocked) {
+        this.blocked = blocked;
     }
 }

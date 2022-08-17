@@ -18,6 +18,14 @@ public class Role implements Serializable {
     @ManyToMany(mappedBy = "roles")
     private Set<User> users = new HashSet<>();
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }

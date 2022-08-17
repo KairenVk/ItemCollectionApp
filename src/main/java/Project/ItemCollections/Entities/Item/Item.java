@@ -5,6 +5,7 @@ import java.util.Set;
 
 @Entity
 public class Item {
+
     @Id
     @Column(name="item_id")
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -18,7 +19,47 @@ public class Item {
     )
     private Set<Tag> itemTags;
     private Integer likes;
+
     @OneToMany(mappedBy="item")
     private Set<ItemsComments> comments;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public Set<Tag> getItemTags() {
+        return itemTags;
+    }
+
+    public void setItemTags(Set<Tag> itemTags) {
+        this.itemTags = itemTags;
+    }
+
+    public Integer getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Integer likes) {
+        this.likes = likes;
+    }
+
+    public Set<ItemsComments> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<ItemsComments> comments) {
+        this.comments = comments;
+    }
 }
