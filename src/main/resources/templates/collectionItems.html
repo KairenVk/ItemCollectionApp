@@ -2,34 +2,38 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:replace="~{fragments/header :: header}"></div>
-    <title>Collection</title>
+    <title th:text="'Items in '+${collectionName}+' collection'"></title>
 </head>
 <body class="bg-light">
 <nav th:replace="~{fragments/navbar :: navbar}"></nav>
 
 <div class="container-fluid">
     <div class="row">
-        <a href="/items/create" class="col-sm-1 btn btn-primary">New item</a>
+        <a th:href="@{/collection/{id}/createItem(id=${collectionId})}" class="col-sm-1 btn btn-primary">Add new item</a>
     </div>
     <div class="row">
         <div class="col-sm-12">
             <table class="table table-striped">
                 <thead>
                 <tr>
+                    <th>Item ID</th>
                     <th>Name</th>
-                    <th>Description</th>
-                    <th>Topic</th>
+                    <th>Tags</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="item: ${items}">
-                    <td><a th:href="@{/collections/{collectionId}(collectionId=${collection.id})}" th:text="${collection.name}"></a></td>
-                    <td th:text="${collection.description}"></td>
-                    <td th:text="${collection.collectionTopic.topicName}"></td>
+                <tr th:each="item: ${collectionItems}">
+                    <td th:text="${item.id}"></td>
+                    <td><a th:href="@{/item/{itemId}/overview(itemId=${item.id})}" th:text="${item.itemName}"></a></td>
                     <td>
-                        <a th:href="@{/collections/{collectionId}/edit(collectionId=${collection.id})}">Edit</a>
-                        <a th:href="@{/collections/{collectionId}/delete(collectionId=${collection.id})}">Delete</a>
+                        <span th:block th:each="tag: ${item.itemTags}">
+                            <span class="bg-info rounded-pill p-1" th:text="${tag.tagName}"></span>
+                        </span>
+                    </td>
+                    <td>
+                        <a th:href="@{/item/{itemId}/edit(itemId=${item.id})}">Edit</a>
+                        <a th:href="@{/item/{itemId}/delete(itemId=${item.id})}">Delete</a>
                     </td>
                 </tr>
                 </tbody>

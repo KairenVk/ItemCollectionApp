@@ -14,7 +14,7 @@ public class CollectionTopics {
     private String topicName;
 
     @OneToMany(mappedBy="collectionTopic")
-    private Set<Collection> collections;
+    private Set<Collection> topicCollections;
 
     public Integer getId() {
         return id;
@@ -32,11 +32,15 @@ public class CollectionTopics {
         this.topicName = topicName;
     }
 
-    public Set<Collection> getCollections() {
-        return collections;
+    public Set<Collection> getTopicCollections() {
+        return topicCollections;
     }
 
-    public void setCollections(Set<Collection> collections) {
-        this.collections = collections;
+    public void setTopicCollections(Set<Collection> topicCollections) {
+        this.topicCollections = topicCollections;
+    }
+
+    public void removeTopicCollection(Collection collection) {
+        topicCollections.remove(collection);
     }
 }

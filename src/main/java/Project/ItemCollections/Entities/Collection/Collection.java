@@ -1,12 +1,16 @@
 package Project.ItemCollections.Entities.Collection;
 
+import Project.ItemCollections.Entities.Item.Item;
 import Project.ItemCollections.Entities.User.User;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-public class Collection {
+public class Collection implements Serializable {
 
     @Id
     @Column(name="collection_id")
@@ -15,7 +19,7 @@ public class Collection {
 
     @ManyToOne
     @JoinColumn(name="user_id", nullable = false)
-    private User user;
+    private User collectionOwner;
 
     private String name;
 
@@ -27,7 +31,12 @@ public class Collection {
     private CollectionTopics collectionTopic;
 
     @OneToMany(mappedBy="collection")
+    @OnDelete(action= OnDeleteAction.CASCADE)
     private Set<CollectionCustomFieldsData> customFields;
+
+    @OneToMany(mappedBy="itemCollection")
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    private Set<Item> itemsInCollection;
 
     private String imageUrl;
 
@@ -79,16 +88,30 @@ public class Collection {
         this.customFields = customFields;
     }
 
-    public User getUser() {
-        return user;
+    public User getCollectionOwner() {
+        return collectionOwner;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setCollectionOwner(User collectionOwner) {
+        this.collectionOwner = collectionOwner;
+    }
+
+    public Set<Item> getItemsInCollection() {
+        return itemsInCollection;
+    }
+
+    public void setItemsInCollection(Set<Item> itemsInCollection) {
+        this.itemsInCollection = itemsInCollection;
+    }
+
+    public void addItemToCollection(Item item) {
+        itemsInCollection.add(item);
     }
     @Override
     public String toString()
     {
-        return "Collection{" + "id=" + id + ", user=" + user + ", name='" + name + '\'' + ", description='" + description + '\'' + ", collectionTopic=" + collectionTopic + '}';
+        return "Collection{" + "id=" + id + ", user=" + collectionOwner + ", name='" + name + '\'' + ", description='" + description + '\'' + ", collectionTopic=" + collectionTopic + '}';
     }
+
+
 }

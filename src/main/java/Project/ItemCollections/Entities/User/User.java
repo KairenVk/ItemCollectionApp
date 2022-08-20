@@ -1,6 +1,7 @@
 package Project.ItemCollections.Entities.User;
 
 import Project.ItemCollections.Entities.Item.Item;
+import Project.ItemCollections.Entities.Collection.Collection;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -35,6 +36,9 @@ public class User implements Serializable {
             inverseJoinColumns = { @JoinColumn(name = "item_id") }
     )
     private Set<Item> itemLikes = new HashSet<>();
+
+    @OneToMany(mappedBy="collectionOwner")
+    private Set<Collection> ownedCollections;
 
     public Integer getId() {
         return id;
@@ -97,5 +101,17 @@ public class User implements Serializable {
 
     public void setBlocked(Boolean blocked) {
         this.blocked = blocked;
+    }
+
+    public Set<Collection> getOwnedCollections() {
+        return ownedCollections;
+    }
+
+    public void setOwnedCollections(Set<Collection> ownedCollections) {
+        this.ownedCollections = ownedCollections;
+    }
+
+    public void removeOwnedCollection(Collection collection) {
+        ownedCollections.remove(collection);
     }
 }

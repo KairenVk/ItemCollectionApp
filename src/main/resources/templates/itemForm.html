@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <title>Item form</title>
+</head>
+<body class="bg-light">
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="py-5 text-center">
+            <h2>Create a new item</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="inline-block col-sm-6 mx-auto">
+                <form class="needs-validation" novalidate th:action="@{/collection/{id}/createItem(id=${collectionId})}" th:object="${item}" method="post">
+                    <div class="mb-3">
+                        <label for="itemName" class="form-label">Name:</label>
+                        <input type="text" name="itemName" placeholder="Name" required id="itemName" class="form-control"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Tags" class="form-label mb-3">Tags:</label>
+                    </div>
+                    <div class="tagsDiv mb-3" id="tagsDiv">
+                        <input type="text" id="Tags" name="tags[]">
+                    </div>
+                    <div class="mb-3">
+                        <button type="button" class="col-sm-2 btn btn-primary" id="newTagBtn" data-increment="1">Add another tag</button>
+                    </div>
+                    <div>
+                        <label class="form-label">Collection Fields:</label>
+                    </div>
+                    <hr class="my-4">
+                    <button type="submit" class="btn-lg btn btn-primary">Submit</button>
+                    <a th:href="@{/collection/{id}/overview(id=${collectionId})}" class="btn-lg btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script th:src="@{/css/bootstrap.bundle.min.js}"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script th:src="@{/js/addTag.js}"></script>
+</body>
+</html>

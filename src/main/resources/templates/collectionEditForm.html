@@ -16,7 +16,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="inline-block col-sm-6 mx-auto">
-                    <form class="needs-validation" novalidate th:action="@{'/collections/'+${collection.id}+'/edit'}" th:object="${collection}" method="post">
+                    <form class="needs-validation" novalidate th:action="@{'/collection/'+${collection.id}+'/edit'}" th:object="${collection}" method="post">
                         <div class="mb-3">
                             <label for="collectionCreateName" class="form-label">Name</label>
                             <input type="text" name="name" th:value="${collection.name}" required id="collectionCreateName" class="form-control"/>
