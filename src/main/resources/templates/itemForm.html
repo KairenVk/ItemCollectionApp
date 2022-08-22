@@ -33,6 +33,34 @@
                     <div>
                         <label class="form-label">Collection Fields:</label>
                     </div>
+                    <div th:each="customField: ${customFields}" th:switch="${customField.fieldType.nameType}">
+                        <div th:case="'String'">
+                            <label class="form-label" th:text="${customField.name}+': '"></label>
+                            <input type="hidden" th:value="${customField.name}"  name="customFieldsNames[]">
+                            <input type="text" name="customFieldsValues[]">
+                        </div>
+                        <div th:case="'Integer'">
+                            <label class="form-label" th:text="${customField.name}+': '"></label>
+                            <input type="hidden" th:value="${customField.name}"  name="customFieldsNames[]">
+                            <input type="number" name="customFieldsValues[]">
+                        </div>
+                        <div  th:case="'Date'">
+                            <label class="form-label" th:text="${customField.name}+': '"></label>
+                            <input type="hidden" th:value="${customField.name}"  name="customFieldsNames[]">
+                            <input type="date" name="customFieldsValues[]">
+                        </div>
+                        <div th:case="'Boolean'">
+                            <label class="form-label" th:text="${customField.name}+': '"></label>
+                            <input type="hidden" th:value="${customField.name}"  name="customFieldsNames[]">
+                            <input type="hidden" name="customFieldsValues[]" value="0" ><input type="checkbox" onclick="this.previousSibling.value=1-this.previousSibling.value">
+                        </div>
+                        <div th:case="'Text'">
+                            <label class="form-label" th:text="${customField.name}+': '"></label>
+                            <input type="hidden" th:value="${customField.name}"  name="customFieldsNames[]">
+                            <textarea name="customFieldsValues[]"></textarea>
+                        </div>
+                    </div>
+                    <input type="hidden" th:name="${customFields}">
                     <hr class="my-4">
                     <button type="submit" class="btn-lg btn btn-primary">Submit</button>
                     <a th:href="@{/collection/{id}/overview(id=${collectionId})}" class="btn-lg btn btn-secondary">Cancel</a>

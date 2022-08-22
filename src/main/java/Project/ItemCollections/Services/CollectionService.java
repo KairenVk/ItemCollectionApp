@@ -1,18 +1,17 @@
 package Project.ItemCollections.Services;
 
 import Project.ItemCollections.Entities.Collection.Collection;
+import Project.ItemCollections.Entities.Collection.CollectionCustomFieldsData;
 import Project.ItemCollections.Entities.Collection.CollectionTopics;
 import Project.ItemCollections.Entities.Item.Item;
 import Project.ItemCollections.Entities.User.User;
-import Project.ItemCollections.Repositories.CollectionRepository;
-import Project.ItemCollections.Repositories.CollectionTopicsRepository;
-import Project.ItemCollections.Repositories.ItemRepository;
-import Project.ItemCollections.Repositories.UserRepository;
+import Project.ItemCollections.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -30,18 +29,40 @@ public class CollectionService {
     @Autowired
     private ItemRepository itemRepository;
 
-    public void createCollection(Collection collection, String topicName) {
+    @Autowired
+    private CollectionCustomFieldsDataRepository collectionCustomFieldsDataRepository;
+
+    @Autowired
+    private FieldTypesRepository fieldTypesRepository;
+
+    public void createCollection(Collection collection, String topicName, List<String> fieldNames, List<String> customFields) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User loggedInUser = userRepository.findByUsername(((UserDetails) principal).getUsername());
-
+        for(String name : fieldNames) {
+            System.out.print(name+" ");
+        }
+        System.out.println();
+        for(String custom : customFields) {
+            System.out.print(custom+" ");
+        }
         CollectionTopics topic = collectionTopicsRepository.findByTopicName(topicName);
-
         Collection n = new Collection();
 
         n.setCollectionOwner(loggedInUser);
         n.setName(collection.getName());
         n.setCollectionTopic(topic);
         n.setDescription(collection.getDescription());
+        collectionRepository.save(n);
+
+        for (int i = 0; i < fieldNames.size(); i++) {
+            CollectionCustomFieldsData field = new CollectionCustomFieldsData();
+            field.setFieldType(fieldTypesRepository.getByNameType(customFields.get(i)));
+            field.setName(fieldNames.get(i));
+            field.setCollection(n);
+            n.addFieldToCollection(field);
+            collectionCustomFieldsDataRepository.save(field);
+
+        }
         collectionRepository.save(n);
     }
 

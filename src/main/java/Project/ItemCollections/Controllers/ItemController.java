@@ -1,16 +1,13 @@
 package Project.ItemCollections.Controllers;
 
 
+import Project.ItemCollections.Entities.Collection.Collection;
+import Project.ItemCollections.Entities.Collection.CollectionCustomFieldsData;
 import Project.ItemCollections.Entities.Item.Item;
-import Project.ItemCollections.Entities.User.User;
-import Project.ItemCollections.Repositories.ItemRepository;
-import Project.ItemCollections.Repositories.TagRepository;
-import Project.ItemCollections.Repositories.UserRepository;
+import Project.ItemCollections.Repositories.*;
 
 import Project.ItemCollections.Services.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -34,20 +31,43 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
+    @Autowired
+    private CollectionRepository collectionRepository;
+
+    @Autowired
+    private CollectionCustomFieldsDataRepository collectionCustomFieldsDataRepository;
+
     @GetMapping("/collection/{id}/createItem")
     public ModelAndView createItemPage(@PathVariable("id") Integer id) {
         ModelAndView mav = new ModelAndView("itemForm");
+        Collection collection = collectionRepository.getById(id);
+        Set<CollectionCustomFieldsData> customFields = collectionCustomFieldsDataRepository.findByCollection(collection);
+
         mav.addObject("itemTags", tagRepository.findAll());
         mav.addObject("collectionId", id);
+        mav.addObject("customFields", customFields);
         return mav;
     }
 
     @PostMapping("/collection/{id}/createItem")
-    public String createItem(RedirectAttributes redirectAttributes, @ModelAttribute Item item, @PathVariable("id") Integer id, @RequestParam(value="tags[]") List<String> tags) {
-        System.out.println(tags);
-        itemService.addItem(item, id, tags);
+    public String createItem(RedirectAttributes redirectAttributes,
+                             @ModelAttribute Item item,
+                             @PathVariable("id") Integer id,
+                             @RequestParam(value="tags[]") List<String> tags,
+                             @RequestParam(value="customFieldsValues[]") List<String> customFieldsValues,
+                             @RequestParam(value="customFieldsNames[]") List<String> customFieldsNames) {
+        System.out.println(customFieldsValues);
+        System.out.println(customFieldsNames);
+        itemService.addItem(item, id, tags, customFieldsNames, customFieldsValues);
         return "redirect:/collection/{id}/overview";
 
 
+    }
+
+    @GetMapping("/item/{id}/overview")
+    public ModelAndView viewItemPage(@PathVariable("id") Integer id) {
+        ModelAndView modelAndView = new ModelAndView("item");
+        modelAndView.addObject("item", itemRepository.getById(id));
+        return modelAndView;
     }
 }

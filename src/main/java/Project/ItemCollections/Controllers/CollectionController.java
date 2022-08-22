@@ -37,6 +37,9 @@ public class CollectionController {
     @Autowired
     private FieldTypesRepository fieldTypesRepository;
 
+    @Autowired
+    private CollectionItemFieldsRepository collectionItemFieldsRepository;
+
     @GetMapping("/collections")
     public ModelAndView getCollectionsPage() {
         ModelAndView modelAndView = new ModelAndView("collections");
@@ -58,8 +61,12 @@ public class CollectionController {
     }
 
     @PostMapping("/collection/create")
-    public String createCollection(RedirectAttributes redirectAttributes, @ModelAttribute Collection collection, @RequestParam(value="topicName") String topicName) {
-        collectionService.createCollection(collection, topicName);
+    public String createCollection(RedirectAttributes redirectAttributes,
+                                   @ModelAttribute Collection collection,
+                                   @RequestParam(value="topicName") String topicName,
+                                   @RequestParam(value="fieldNames[]", required = false) List<String> fieldNames,
+                                   @RequestParam(value="customField[]", required = false) List<String> customFields) {
+        collectionService.createCollection(collection, topicName, fieldNames, customFields);
         redirectAttributes.addFlashAttribute("message", "Collection has been created!");
         return "redirect:/collections";
     }

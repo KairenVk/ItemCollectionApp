@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <div th:replace="~{fragments/header :: header}"></div>
+        <title>Item</title>
+    </head>
+    <body class="bg-light">
+        <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+        <div class="container">
+            <div class="row mt-2">
+                <h1 th:text="${item.itemCollection.name}" class="text-center"></h1>
+            </div>
+            <div class="row">
+                <div class="col-md-6 py-2">
+                    <div class="shadow p-2 bg-body rounded">
+                        <img src="https://ichef.bbci.co.uk/news/976/cpsprodpb/EEE3/production/_125555116_flowers_02.jpg" alt="obrazek" class="img-fluid" />
+                    </div>
+                </div>
+                <div class="col-md-6 py-2">
+                    <div class="h-100 shadow p-2 mb-5 bg-body rounded">
+                        <div class="container">
+                            <div class="row">
+                                <h2 th:text="${item.itemName}" class="text-center"></h2>
+                            </div>
+                            <div class="row">
+                                <p class="text-center fs-6 fst-italic">
+                                    <span th:text="'Owned by '+${item.itemOwner.username}"></span>
+                                </p>
+                            </div>
+                        </div>
+                        <hr class="my-2">
+                        Item ID: <span th:text="${item.id}"></span><br/>
+                        Likes: <span th:text="${item.likes}"></span><br/>
+                        Tags: Tag1, Tag2<br/>
+                        Customfield 1: Value 1<br/>
+                        Customfield 2: Value 2<br/>
+                        Customfield 3: Value 3<br/>
+                        Customfield 4: Value 4<br/>
+                        Customfield 5: Value 5<br/>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row">
+                <h2 class="text-center">Comments</h2>
+                <div class="container mt-4">
+                    <div class="row mx-auto">
+                        <hr>
+                        <form>
+                            <div class="mb-3">
+                                <textarea name="comment" placeholder="Add a new comment" class="form-control"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <input type="submit" value="Send" class="btn btn-primary btn-lg w-100" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="comments">
+                    <div data-comment-id="1" class="container">
+                        <div class="row">
+                            <hr>
+                            <div class="col-sm-3">
+                                <h4>User 1</h4>
+                            </div>
+                            <div class="col-sm-9">
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. A architecto at dicta ex harum, magni nulla officia officiis, quam quibusdam sequi ullam velit! Accusantium fuga ipsum molestiae omnis soluta voluptate?
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="~{fragments/footer :: footer}"></div>
+
+        <script th:src="@{/css/bootstrap.bundle.min.js}"></script>
+        <script th:src="@{/css/sidebars.js}"></script>
+    </body>
+</html>

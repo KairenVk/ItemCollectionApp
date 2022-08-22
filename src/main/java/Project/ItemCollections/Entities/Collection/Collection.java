@@ -7,6 +7,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -32,11 +33,11 @@ public class Collection implements Serializable {
 
     @OneToMany(mappedBy="collection")
     @OnDelete(action= OnDeleteAction.CASCADE)
-    private Set<CollectionCustomFieldsData> customFields;
+    private Set<CollectionCustomFieldsData> customFields = new HashSet<>();
 
     @OneToMany(mappedBy="itemCollection")
     @OnDelete(action= OnDeleteAction.CASCADE)
-    private Set<Item> itemsInCollection;
+    private Set<Item> itemsInCollection = new HashSet<>();
 
     private String imageUrl;
 
@@ -106,6 +107,10 @@ public class Collection implements Serializable {
 
     public void addItemToCollection(Item item) {
         itemsInCollection.add(item);
+    }
+
+    public void addFieldToCollection(CollectionCustomFieldsData customfield) {
+        customFields.add(customfield);
     }
     @Override
     public String toString()

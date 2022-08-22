@@ -1,6 +1,7 @@
 package Project.ItemCollections.Entities.Collection;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -14,7 +15,7 @@ public class FieldTypes {
     private String nameType;
 
     @OneToMany (mappedBy="fieldType")
-    private Set<CollectionCustomFieldsData> CollectionField;
+    private Set<CollectionCustomFieldsData> CollectionField = new HashSet<>();
 
     public Integer getId() {
         return id;

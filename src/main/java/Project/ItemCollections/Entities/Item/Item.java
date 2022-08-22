@@ -1,6 +1,7 @@
 package Project.ItemCollections.Entities.Item;
 
 import Project.ItemCollections.Entities.Collection.Collection;
+import Project.ItemCollections.Entities.Collection.CollectionItemFields;
 import Project.ItemCollections.Entities.User.User;
 
 import javax.persistence.*;
@@ -25,7 +26,7 @@ public class Item {
     private Integer likes;
 
     @OneToMany(mappedBy="item")
-    private Set<ItemsComments> comments;
+    private Set<ItemsComments> comments = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name="collection_id", nullable=false)
@@ -34,6 +35,9 @@ public class Item {
     @ManyToOne
     @JoinColumn(name="user_id", nullable = false)
     private User itemOwner;
+
+    @OneToMany(mappedBy="itemId")
+    private Set<CollectionItemFields> customItemFields = new HashSet<>();
     public Integer getId() {
         return id;
     }
@@ -91,5 +95,17 @@ public class Item {
 
     public void setItemOwner(User itemOwner) {
         this.itemOwner = itemOwner;
+    }
+
+    public Set<CollectionItemFields> getCustomItemFields() {
+        return customItemFields;
+    }
+
+    public void setCustomItemFields(Set<CollectionItemFields> customItemFields) {
+        this.customItemFields = customItemFields;
+    }
+
+    public void addCustomItemField(CollectionItemFields customField) {
+        customItemFields.add(customField);
     }
 }

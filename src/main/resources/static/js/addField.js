@@ -2,15 +2,25 @@ $(document).ready(function () {
 
         $("#repeatFieldBtn").click(function () {
         $newid = $(this).data("increment");
-        $fieldType= $("#fieldsDiv").find('select[name="fieldType"]').val();
-        console.log($fieldType);
-        $newFieldDiv = $("<div id=\"newFieldDiv\"></div>");
-        $newFieldDiv.unwrap();
-        $newFieldDiv.insertAfter($(".fieldsDiv").last());
-        $newFieldDiv.last().attr('id',   "fieldType" + '_' + $newid);
+        $fieldType= $("#newFieldDiv").find('select[name="fieldType"]').val();
+        $newFieldDiv = $("<div class=\"newFieldDiv m-2\"></div>");
+        $newFieldDiv.insertAfter($(".newFieldDiv").last());
+        $newFieldDiv.last().attr('id',   "newFieldDiv" + '_' + $newid);
         switch ($fieldType) {
             case 'String':
-                $($newFieldDiv).append('<input type="text" id="stringField" name="stringField[]"/> <button type="button" class="btn btn-danger removeFieldBtn" data-id="fieldsDiv'+'_'+ $newid+'">Remove</button>');
+                $($newFieldDiv).append('<label for="stringField" class="form-label p-1">Name: </label><input type="text" placeholder="Field name" name="fieldNames[]"/><input type="text" id="stringField" value="String" readonly name="customField[]"/><button type="button" class="btn btn-danger removeFieldBtn" data-id="newFieldDiv'+'_'+ $newid+'">Remove</button>');
+                break;
+            case 'Integer':
+                $($newFieldDiv).append('<label for="integerField" class="form-label p-1">Name: </label><input type="text" placeholder="Field name" name="fieldNames[]"/><input type="text" id="stringField" value="Integer" readonly name="customField[]"/><button type="button" class="btn btn-danger removeFieldBtn" data-id="newFieldDiv'+'_'+ $newid+'">Remove</button>');
+                break;
+            case 'Date':
+                $($newFieldDiv).append('<label for="dateField" class="form-label p-1">Name: </label><input type="text" placeholder="Field name" name="fieldNames[]"/><input type="text" id="stringField" value="Date" readonly name="customField[]"/><button type="button" class="btn btn-danger removeFieldBtn" data-id="newFieldDiv'+'_'+ $newid+'">Remove</button>');
+                break;
+            case 'Boolean':
+                $($newFieldDiv).append('<label for="checkboxField" class="form-label p-1">Name: </label><input type="text" placeholder="Field name" name="fieldNames[]"/><input type="text" id="stringField" value="Boolean" readonly name="customField[]"/><button type="button" class="btn btn-danger removeFieldBtn" data-id="newFieldDiv'+'_'+ $newid+'">Remove</button>');
+                break;
+            case 'Text':
+                $($newFieldDiv).append('<label for="textField" class="form-label p-1">Name: </label><input type="text" placeholder="Field name" name="fieldNames[]"/><input type="text" id="stringField" value="Text" readonly name="customField[]"/><button type="button" class="btn btn-danger removeFieldBtn" data-id="newFieldDiv'+'_'+ $newid+'">Remove</button>');
                 break;
                 }
 
