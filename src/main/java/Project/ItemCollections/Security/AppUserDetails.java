@@ -21,10 +21,10 @@ public class AppUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<Role> roles = user.getRoles();
+        List<Role> roles = user.getRoles();
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         for (Role role : roles) {
-            authorities.add(new SimpleGrantedAuthority((role.toString())));
+            authorities.add(new SimpleGrantedAuthority((role.getName())));
         }
         return authorities;
     }
@@ -56,7 +56,7 @@ public class AppUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return !user.getBlocked();
     }
 }
 

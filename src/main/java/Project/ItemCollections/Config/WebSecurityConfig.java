@@ -1,5 +1,6 @@
 package Project.ItemCollections.Config;
 
+import Project.ItemCollections.Repositories.CollectionRepository;
 import Project.ItemCollections.Repositories.UserRepository;
 import Project.ItemCollections.Services.AppUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,11 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private AuthenticatedUserService authenticatedUserService;
+
+    @Autowired
+    private CollectionRepository collectionRepository;
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -50,7 +56,11 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/home", "/registration", "/registerUser", "/search").permitAll()
+                .antMatchers("/admin")
+                .hasAuthority("ROLE_ADMIN")
+                .and()
+                .authorizeRequests()
+                .antMatchers("/", "/main", "/registration", "/registerUser", "/search", "/usersCollections", "/collection/**", "/item/**").permitAll()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .anyRequest().authenticated()
                 .and()

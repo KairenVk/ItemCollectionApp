@@ -1,7 +1,6 @@
 package Project.ItemCollections.Controllers;
 
 import Project.ItemCollections.Entities.Collection.Collection;
-import Project.ItemCollections.Entities.Item.Item;
 import Project.ItemCollections.Entities.User.User;
 import Project.ItemCollections.Repositories.*;
 import Project.ItemCollections.Services.CollectionService;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 @Controller
+@Transactional
 public class CollectionController {
 
     @Autowired
@@ -73,7 +74,6 @@ public class CollectionController {
 
     @GetMapping("/collection/{id}/edit")
     public ModelAndView editCollectionPage(@PathVariable("id") Integer id) {
-        System.out.println("Testing");
         ModelAndView mav = new ModelAndView("collectionEditForm");
         Collection targetCollection = collectionRepository.getById(id);
         mav.addObject("collection", targetCollection);
@@ -100,8 +100,14 @@ public class CollectionController {
         ModelAndView mav = new ModelAndView("collectionItems");
         Collection collection = collectionRepository.getById(id);
         mav.addObject("collectionItems", itemRepository.findByItemCollection(collection));
-        mav.addObject("collectionName", collection.getName());
-        mav.addObject("collectionId", id);
+        mav.addObject("collection", collectionRepository.getById(id));
+        return mav;
+    }
+
+    @GetMapping("/usersCollections")
+    public ModelAndView usersCollectionsPage() {
+        ModelAndView mav = new ModelAndView("usersCollections");
+        mav.addObject("collections", collectionRepository.findAll());
         return mav;
     }
 }

@@ -1,10 +1,11 @@
 <!doctype html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:include="~{fragments/dataTable :: dataTable}">
     <div th:replace="~{fragments/header :: header}"></div>
     <title>Collection</title>
 </head>
 <body class="bg-light">
+    <div th:replace="~{fragments/flashMessage :: flashMessage}"></div>
     <nav th:replace="~{fragments/navbar :: navbar}"></nav>
 
     <div class="container-fluid">
@@ -12,7 +13,7 @@
             <a href="/collection/create" class="col-sm-1 ms-4 my-2 btn btn-primary">New collection</a>
         </div>
         <div class="row">
-            <table class="table table-striped table-hover">
+            <table id="objectable" class="table table-striped table-hover">
                 <thead class="table-secondary">
                     <tr>
                         <th class="col-3">Name</th>
@@ -39,6 +40,6 @@
     <div th:replace="~{fragments/footer :: footer}"></div>
 
     <script th:src="@{/css/bootstrap.bundle.min.js}"></script>
-    <script th:src="@{/css/sidebars.js}"></script>
+
 </body>
 </html>

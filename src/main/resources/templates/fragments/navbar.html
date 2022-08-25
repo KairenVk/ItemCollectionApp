@@ -1,4 +1,5 @@
 <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <script th:src="@{/css/sidebars.js}"></script>
     <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -9,16 +10,28 @@
                 <div class="row">
                     <ul class="navbar-nav mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" href="/collections"><strong sec:authorize="isAuthenticated()" sec:authentication="name"></strong></a>
+                                <a class="nav-link active" href="#" sec:authorize="isAuthenticated()" sec:authentication="name"></a>
                         </li>
-                        <li class="nav-item active">
+                        <li class="nav-item">
                             <a class="nav-link" href="/main">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/login">Login</a>
+                            <a class="nav-link" href="/usersCollections">Users collections</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/registration">Registration</a>
+                            <a class="nav-link" href="/collections" sec:authorize="isAuthenticated()"> Your collections</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout" sec:authorize="isAuthenticated()">Logout</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login" sec:authorize="isAnonymous()">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/registration" sec:authorize="isAnonymous()">Registration</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin" sec:authorize="hasRole('ROLE_ADMIN')">Admin panel</a>
                         </li>
                     </ul>
                 </div>

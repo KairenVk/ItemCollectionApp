@@ -5,7 +5,8 @@ import Project.ItemCollections.Entities.Collection.CollectionItemFields;
 import Project.ItemCollections.Entities.User.User;
 
 import javax.persistence.*;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,11 +23,13 @@ public class Item {
             joinColumns = { @JoinColumn(name = "item_id") },
             inverseJoinColumns = { @JoinColumn(name = "tag_id") }
     )
-    private Set<Tag> itemTags = new HashSet<>();
-    private Integer likes;
+    private List<Tag> itemTags = new ArrayList<>();
+
+    @ManyToMany(mappedBy="itemLikes")
+    private List<User> usersWhoLiked;
 
     @OneToMany(mappedBy="item")
-    private Set<ItemsComments> comments = new HashSet<>();
+    private List<ItemsComments> comments = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name="collection_id", nullable=false)
@@ -37,7 +40,7 @@ public class Item {
     private User itemOwner;
 
     @OneToMany(mappedBy="itemId")
-    private Set<CollectionItemFields> customItemFields = new HashSet<>();
+    private List<CollectionItemFields> customItemFields = new ArrayList<>();
     public Integer getId() {
         return id;
     }
@@ -54,30 +57,23 @@ public class Item {
         this.itemName = itemName;
     }
 
-    public Set<Tag> getItemTags() {
+    public List<Tag> getItemTags() {
         return itemTags;
     }
 
-    public void setItemTags(Set<Tag> itemTags) {
+    public void setItemTags(List<Tag> itemTags) {
         this.itemTags = itemTags;
     }
 
     public void addItemTag(Tag itemTag) {
         itemTags.add(itemTag);
     }
-    public Integer getLikes() {
-        return likes;
-    }
 
-    public void setLikes(Integer likes) {
-        this.likes = likes;
-    }
-
-    public Set<ItemsComments> getComments() {
+    public List<ItemsComments> getComments() {
         return comments;
     }
 
-    public void setComments(Set<ItemsComments> comments) {
+    public void setComments(List<ItemsComments> comments) {
         this.comments = comments;
     }
 
@@ -97,15 +93,31 @@ public class Item {
         this.itemOwner = itemOwner;
     }
 
-    public Set<CollectionItemFields> getCustomItemFields() {
+    public List getCustomItemFields() {
         return customItemFields;
-    }
-
-    public void setCustomItemFields(Set<CollectionItemFields> customItemFields) {
-        this.customItemFields = customItemFields;
     }
 
     public void addCustomItemField(CollectionItemFields customField) {
         customItemFields.add(customField);
+    }
+
+    public void removeItemTags() {
+        itemTags.clear();
+    }
+
+    public List<User> getUsersWhoLiked() {
+        return usersWhoLiked;
+    }
+
+    public void setUsersWhoLiked(List<User> usersWhoLiked) {
+        this.usersWhoLiked = usersWhoLiked;
+    }
+
+    public void addUserWhoLiked(User user) {
+        usersWhoLiked.add(user);
+    }
+
+    public void setCustomItemFields(List<CollectionItemFields> customItemFields) {
+        this.customItemFields = customItemFields;
     }
 }

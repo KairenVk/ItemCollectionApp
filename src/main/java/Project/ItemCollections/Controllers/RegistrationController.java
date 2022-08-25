@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class RegistrationController {
@@ -19,8 +20,17 @@ public class RegistrationController {
     }
 
     @PostMapping("/registerUser")
-    public String registerUser(User user) {
-        userService.createUser(user);
-        return "redirect:/registration";
+    public String registerUser(User user, RedirectAttributes redirectAttributes) {
+        boolean result = userService.createUser(user);
+
+        if (result) {
+            redirectAttributes.addFlashAttribute("message", "User created successfully! Login using your credentials below.");
+            return "redirect:/login";
+        }
+        else {
+            redirectAttributes.addFlashAttribute("message", "User with given credentials already exists!");
+            return "redirect:/registration";
+        }
+
     }
 }

@@ -2,10 +2,14 @@ package Project.ItemCollections.Entities.User;
 
 import Project.ItemCollections.Entities.Item.Item;
 import Project.ItemCollections.Entities.Collection.Collection;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -21,24 +25,26 @@ public class User implements Serializable {
 
     private Boolean blocked = false;
 
-    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @LazyCollection(LazyCollectionOption.FALSE)
     @JoinTable(
             name = "users_roles",
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "role_id") }
     )
-    private Set<Role> roles = new HashSet<>();
+    private List<Role> roles = new ArrayList<>();
 
-    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @LazyCollection(LazyCollectionOption.FALSE)
     @JoinTable(
             name = "users_likes",
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "item_id") }
     )
-    private Set<Item> itemLikes = new HashSet<>();
+    private List<Item> itemLikes = new ArrayList<>();
 
     @OneToMany(mappedBy="collectionOwner")
-    private Set<Collection> ownedCollections;
+    private List<Collection> ownedCollections;
 
     public Integer getId() {
         return id;
@@ -72,22 +78,25 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public Set<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
     public void addRole(Role role) {
             roles.add(role);
     }
 
-    public Set<Item> getItemLikes() {
+    public void removeRole(Role role) {
+        roles.remove(role);
+    }
+    public List<Item> getItemLikes() {
         return itemLikes;
     }
 
-    public void setItemLikes(Set<Item> itemLikes) {
+    public void setItemLikes(List<Item> itemLikes) {
         this.itemLikes = itemLikes;
     }
 
@@ -103,15 +112,19 @@ public class User implements Serializable {
         this.blocked = blocked;
     }
 
-    public Set<Collection> getOwnedCollections() {
+    public List<Collection> getOwnedCollections() {
         return ownedCollections;
     }
 
-    public void setOwnedCollections(Set<Collection> ownedCollections) {
+    public void setOwnedCollections(List<Collection> ownedCollections) {
         this.ownedCollections = ownedCollections;
     }
 
     public void removeOwnedCollection(Collection collection) {
         ownedCollections.remove(collection);
+    }
+
+    public void removeItemLike(Item item) {
+        itemLikes.remove(item);
     }
 }

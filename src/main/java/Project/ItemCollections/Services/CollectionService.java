@@ -35,16 +35,13 @@ public class CollectionService {
     @Autowired
     private FieldTypesRepository fieldTypesRepository;
 
+    @Autowired
+    private CollectionItemFieldsRepository collectionItemFieldsRepository;
+
     public void createCollection(Collection collection, String topicName, List<String> fieldNames, List<String> customFields) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User loggedInUser = userRepository.findByUsername(((UserDetails) principal).getUsername());
-        for(String name : fieldNames) {
-            System.out.print(name+" ");
-        }
-        System.out.println();
-        for(String custom : customFields) {
-            System.out.print(custom+" ");
-        }
+
         CollectionTopics topic = collectionTopicsRepository.findByTopicName(topicName);
         Collection n = new Collection();
 
@@ -53,17 +50,18 @@ public class CollectionService {
         n.setCollectionTopic(topic);
         n.setDescription(collection.getDescription());
         collectionRepository.save(n);
-
-        for (int i = 0; i < fieldNames.size(); i++) {
-            CollectionCustomFieldsData field = new CollectionCustomFieldsData();
-            field.setFieldType(fieldTypesRepository.getByNameType(customFields.get(i)));
-            field.setName(fieldNames.get(i));
-            field.setCollection(n);
-            n.addFieldToCollection(field);
-            collectionCustomFieldsDataRepository.save(field);
-
+        if (fieldNames != null) {
+            for (int i = 0; i < fieldNames.size(); i++) {
+                CollectionCustomFieldsData field = new CollectionCustomFieldsData();
+                field.setFieldType(fieldTypesRepository.getByNameType(customFields.get(i)));
+                field.setName(fieldNames.get(i));
+                field.setCollection(n);
+                n.addFieldToCollection(field);
+                collectionCustomFieldsDataRepository.save(field);
+            }
+            collectionRepository.save(n);
         }
-        collectionRepository.save(n);
+
     }
 
     public void editCollection(Collection collection, Integer id, String topicName) {
@@ -86,9 +84,12 @@ public class CollectionService {
         topic.removeTopicCollection(n);
         Set<Item> items = n.getItemsInCollection();
         for (Item item : items) {
+            item.removeItemTags();
+            collectionItemFieldsRepository.deleteByItemId(item);
             itemRepository.delete(item);
         }
         owner.removeOwnedCollection(n);
+
         collectionRepository.delete(n);
     }
 }

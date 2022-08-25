@@ -1,11 +1,11 @@
 package Project.ItemCollections.Services;
 
-import Project.ItemCollections.Entities.Collection.CollectionCustomFieldsData;
 import Project.ItemCollections.Entities.Collection.CollectionItemFields;
 import Project.ItemCollections.Entities.Item.Item;
 import Project.ItemCollections.Entities.Item.Tag;
 import Project.ItemCollections.Entities.User.User;
 import Project.ItemCollections.Repositories.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,10 +29,7 @@ public class ItemService {
     private UserRepository userRepository;
 
     @Autowired
-    private CollectionItemFieldsRepository collectionItemFieldsRepository;
-
-    @Autowired
-    private CollectionCustomFieldsDataRepository collectionCustomFieldsDataRepository;
+    private CustomFieldsService customFieldsService;
 
     public void addItem(Item item, Integer collectionId, List<String> tags, List<String> customFieldsNames, List<String> customFieldsValues) {
 
@@ -47,18 +44,25 @@ public class ItemService {
         }
         n.setItemName(item.getItemName());
         n.setItemOwner(loggedInUser);
-        n.setLikes(0);
         itemRepository.save(n);
         collectionRepository.getById(collectionId).addItemToCollection(n);
+        if(customFieldsNames != null && customFieldsValues != null)
+            customFieldsService.CreateItemCustomFields(n, customFieldsNames, customFieldsValues);
+    }
+    public void likeItem(Integer id) {
 
-        for (int i = 0; i < customFieldsNames.size(); i++) {
-            CollectionItemFields newField = new CollectionItemFields();
-            newField.setFieldContent(customFieldsValues.get(i));
-            newField.setItemId(n);
-            newField.setCustomFieldsData(collectionCustomFieldsDataRepository.findByName(customFieldsNames.get(i)));
-            collectionItemFieldsRepository.save(newField);
-            n.addCustomItemField(newField);
-            itemRepository.save(n);
-        }
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User loggedInUser = userRepository.findByUsername(((UserDetails) principal).getUsername());
+
+        if(!loggedInUser.getItemLikes().contains(itemRepository.getById(id)))
+            loggedInUser.addItemLike(itemRepository.getById(id));
+    }
+
+    public void dislikeItem(Integer id) {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User loggedInUser = userRepository.findByUsername(((UserDetails) principal).getUsername());
+
+        loggedInUser.removeItemLike(itemRepository.getById(id));
     }
 }
