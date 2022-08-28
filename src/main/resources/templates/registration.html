@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:replace="~{fragments/header :: header}"></div>
-    <title>Registration</title>
+    <title th:text="#{label.registrationTitle}"></title>
 </head>
 <body class="bg-light">
 <div th:replace="~{fragments/flashMessage :: flashMessage}"></div>

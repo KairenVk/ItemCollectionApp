@@ -15,7 +15,7 @@ $(document).ready(function () {
 
         $(document).on('click', '.removeTagBtn', function () {
 
-		$divId = $(this).data("id");
+		$divId = $(this).data("data-id");
 		$("#"+$divId).remove();
 		$inc = $("#repeatTagBtn").data("increment");
 		$("#repeatTagBtn").data("increment", $inc-1);

@@ -2,19 +2,17 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <div th:replace="~{fragments/header :: header}"></div>
-        <title>Item</title>
+        <title th:text="${item.itemName}"></title>
     </head>
     <body class="bg-light">
         <nav th:replace="~{fragments/navbar :: navbar}"></nav>
-
         <div class="container">
             <div class="row mt-2">
-                <h1 th:text="${item.itemCollection.name}" class="text-center"></h1>
             </div>
             <div class="row">
                 <div class="col-md-6 py-2">
                     <div class="shadow p-2 bg-body rounded">
-                        <img src="https://cdn.discordapp.com/attachments/1007991373888225411/1010973286747877386/cccc.png" alt="obrazek" class="img-fluid" />
+                        <img th:src="${item.imageUrl}" alt="Image" class="img-fluid" />
                     </div>
                 </div>
                 <div class="col-md-6 py-2">
@@ -22,19 +20,23 @@
                         <div class="container">
                             <div class="row">
                                 <h2 th:text="${item.itemName}" class="text-center"></h2>
-                                <a sec:authorize="isAuthenticated()" th:if="${!#lists.contains(item.usersWhoLiked, user)}"class="text-center" th:href="@{/item/{itemId}/overview/likeItem(itemId=${item.id})}"><img th:src="@{/img/like.svg}" alt="Add to favorites">Add to favorites</a>
-                                <a sec:authorize="isAuthenticated()" th:if="${#lists.contains(item.usersWhoLiked, user)}" class="text-center" th:href="@{/item/{itemId}/overview/dislikeItem(itemId=${item.id})}"><img th:src="@{/img/like.svg}" alt="Remove from favorites">Remove from favorites</a>
+                                <a sec:authorize="isAuthenticated()" th:if="${!#lists.contains(item.usersWhoLiked, user)}"class="text-center" th:href="@{/item/{itemId}/overview/likeItem(itemId=${item.id})}"><img th:src="@{/img/like.svg}" th:text="#{label.addLike}"></a>
+                                <a sec:authorize="isAuthenticated()" th:if="${#lists.contains(item.usersWhoLiked, user)}" class="text-center" th:href="@{/item/{itemId}/overview/dislikeItem(itemId=${item.id})}"><img th:src="@{/img/like.svg}" th:text="#{label.removeLike}"></a>
                             </div>
                             <div class="row">
                                 <p class="text-center fs-6 fst-italic">
-                                    <span th:text="'Owned by '+${item.itemOwner.username}"></span>
+                                    <span th:text="#{label.itemCollection(${item.itemCollection.name})}"></span>
+                                </p>
+                                <p class="text-center fs-6 fst-italic">
+                                    <span th:text="#{label.itemOwner(${item.itemOwner.username})}"></span>
                                 </p>
                             </div>
                         </div>
                         <hr class="my-2">
-                        Item ID: <span th:text="${item.id}"></span><br/>
-                        Likes: <span th:text="${#lists.size(item.usersWhoLiked)}"></span><br/>
-                        Tags: <span th:each="tag : ${item.itemTags}" th:text="${tag.tagName}+', '"></span><br/><br/>
+                        <span th:text="#{label.itemPageId(${item.id})}"></span><br/>
+                        <span th:text="#{label.itemPageLikes(${#lists.size(item.usersWhoLiked)})}"></span><br/>
+                        <span th:text="#{label.itemPageTags}"></span>
+                        <span th:each="tag : ${item.itemTags}" th:text="${tag.tagName}+', '"></span><br/><br/>
                         <span th:block th:each="field : ${item.customItemFields}">
                             <span th:if="${field.customFieldsData.fieldType.nameType} != 'Boolean'"th:inline="text">[[${field.customFieldsData.name}]]: [[${field.fieldContent}]]</span>
                             <span th:if="${field.customFieldsData.fieldType.nameType} == 'Boolean'" th:inline="text">[[${field.customFieldsData.name}]]: </span>
@@ -47,31 +49,29 @@
             </div>
             <hr class="my-4">
             <div class="row">
-                <h2 class="text-center">Comments</h2>
+                <h2 class="text-center" th:text="#{label.itemPageComments}"></h2>
                 <div class="container mt-4">
                     <div class="row mx-auto">
                         <hr>
-                        <form sec:authorize="isAuthenticated()" >
+                        <form sec:authorize="isAuthenticated()" th:action="@{/item/{id}/overview/addComment(id=${item.id})}" method="post">
                             <div class="mb-3">
-                                <textarea name="comment" placeholder="Add a new comment" class="form-control"></textarea>
+                                <textarea name="comment" th:placeholder="#{label.commentArea}" class="form-control"></textarea>
                             </div>
                             <div class="mb-3">
-                                <input type="submit" value="Send" class="btn btn-primary btn-lg w-100" />
+                                <input type="submit" th:value="#{label.addCommentBtn}" class="btn btn-primary btn-lg w-100" />
                             </div>
                         </form>
                     </div>
                 </div>
-                <div class="comments">
-                    <div data-comment-id="1" class="container">
+                <div class="comments" th:each="comment : ${comments}">
+                    <div class="container">
                         <div class="row">
                             <hr>
                             <div class="col-sm-3">
-                                <h4>User 1</h4>
+                                <h4 th:text="${comment.author.username}"></h4>
                             </div>
                             <div class="col-sm-9">
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. A architecto at dicta ex harum, magni nulla officia officiis, quam quibusdam sequi ullam velit! Accusantium fuga ipsum molestiae omnis soluta voluptate?
-                                </p>
+                                <p th:text="${comment.comment}"></p>
                             </div>
                         </div>
                     </div>

@@ -41,6 +41,8 @@ public class Item {
 
     @OneToMany(mappedBy="itemId")
     private List<CollectionItemFields> customItemFields = new ArrayList<>();
+
+    private String imageUrl;
     public Integer getId() {
         return id;
     }
@@ -119,5 +121,13 @@ public class Item {
 
     public void setCustomItemFields(List<CollectionItemFields> customItemFields) {
         this.customItemFields = customItemFields;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

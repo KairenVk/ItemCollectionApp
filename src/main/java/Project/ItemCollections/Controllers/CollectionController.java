@@ -3,14 +3,17 @@ package Project.ItemCollections.Controllers;
 import Project.ItemCollections.Entities.Collection.Collection;
 import Project.ItemCollections.Entities.User.User;
 import Project.ItemCollections.Repositories.*;
+import Project.ItemCollections.Services.AuthService;
 import Project.ItemCollections.Services.CollectionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -38,27 +41,22 @@ public class CollectionController {
     @Autowired
     private FieldTypesRepository fieldTypesRepository;
 
-    @Autowired
-    private CollectionItemFieldsRepository collectionItemFieldsRepository;
-
     @GetMapping("/collections")
     public ModelAndView getCollectionsPage() {
-        ModelAndView modelAndView = new ModelAndView("collections");
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            User loggedInUser = userRepository.findByUsername(((UserDetails) principal).getUsername());
-            List<Collection> collectionList = collectionRepository.findByCollectionOwner(loggedInUser);
-            modelAndView.addObject("collections", collectionList);
-        }
+        User user = userRepository.findByUsername(((UserDetails) principal).getUsername());
+        ModelAndView modelAndView = new ModelAndView("collections");
+        List<Collection> collectionList = collectionRepository.findByCollectionOwner(user);
+        modelAndView.addObject("collections", collectionList);
         return modelAndView;
     }
 
     @GetMapping("/collection/create")
     public ModelAndView createCollectionPage() {
-        ModelAndView mav = new ModelAndView("collectionForm");
-        mav.addObject("collectionTopics", collectionTopicsRepository.findAll());
-        mav.addObject("fieldTypes", fieldTypesRepository.findAll());
-        return mav;
+        ModelAndView modelAndView = new ModelAndView("collectionForm");
+        modelAndView.addObject("collectionTopics", collectionTopicsRepository.findAll());
+        modelAndView.addObject("fieldTypes", fieldTypesRepository.findAll());
+        return modelAndView;
     }
 
     @PostMapping("/collection/create")
@@ -66,8 +64,10 @@ public class CollectionController {
                                    @ModelAttribute Collection collection,
                                    @RequestParam(value="topicName") String topicName,
                                    @RequestParam(value="fieldNames[]", required = false) List<String> fieldNames,
-                                   @RequestParam(value="customField[]", required = false) List<String> customFields) {
-        collectionService.createCollection(collection, topicName, fieldNames, customFields);
+                                   @RequestParam(value="customField[]", required = false) List<String> customFields,
+                                   @RequestParam(value="image", required = false) MultipartFile file) {
+        System.out.println(file.getOriginalFilename());
+        collectionService.createCollection(collection, topicName, fieldNames, customFields, file);
         redirectAttributes.addFlashAttribute("message", "Collection has been created!");
         return "redirect:/collections";
     }

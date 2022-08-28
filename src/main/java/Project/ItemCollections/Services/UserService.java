@@ -7,6 +7,7 @@ import Project.ItemCollections.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -81,6 +82,15 @@ public class UserService {
         }
         if (currentUserInList && (action == "block" || action == "delete" || action == "revokeAdmin"))
             SecurityContextHolder.clearContext();
+    }
+
+    public User getLoggedUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            User loggedInUser = userRepository.findByUsername(((UserDetails) principal).getUsername());
+            return loggedInUser;
+        }
+        return null;
     }
 
 }

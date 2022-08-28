@@ -5,11 +5,13 @@ import Project.ItemCollections.Entities.Collection.CollectionCustomFieldsData;
 import Project.ItemCollections.Entities.Collection.CollectionTopics;
 import Project.ItemCollections.Entities.Item.Item;
 import Project.ItemCollections.Entities.User.User;
+import Project.ItemCollections.Exceptions.StorageException;
 import Project.ItemCollections.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Set;
@@ -38,9 +40,16 @@ public class CollectionService {
     @Autowired
     private CollectionItemFieldsRepository collectionItemFieldsRepository;
 
-    public void createCollection(Collection collection, String topicName, List<String> fieldNames, List<String> customFields) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User loggedInUser = userRepository.findByUsername(((UserDetails) principal).getUsername());
+    @Autowired
+    private FileService fileService;
+
+    @Autowired
+    private UserService userService;
+    public void createCollection(Collection collection, String topicName, List<String> fieldNames, List<String> customFields, MultipartFile image) {
+
+        fileService.validateFile(image);
+        System.out.println("image OK");
+        User loggedInUser = userService.getLoggedUser();
 
         CollectionTopics topic = collectionTopicsRepository.findByTopicName(topicName);
         Collection n = new Collection();
@@ -50,6 +59,8 @@ public class CollectionService {
         n.setCollectionTopic(topic);
         n.setDescription(collection.getDescription());
         collectionRepository.save(n);
+        String imageUrl = fileService.uploadFile(image, n.getId());
+        n.setImageUrl(imageUrl);
         if (fieldNames != null) {
             for (int i = 0; i < fieldNames.size(); i++) {
                 CollectionCustomFieldsData field = new CollectionCustomFieldsData();
@@ -59,9 +70,8 @@ public class CollectionService {
                 n.addFieldToCollection(field);
                 collectionCustomFieldsDataRepository.save(field);
             }
-            collectionRepository.save(n);
         }
-
+        collectionRepository.save(n);
     }
 
     public void editCollection(Collection collection, Integer id, String topicName) {

@@ -2,40 +2,34 @@
 <div th:fragment="registrationForm">
     <script th:src="@{/css/form-validation.js}"></script>
     <div class="py-5 text-center">
-        <h2>Registration form</h2>
-        <p class="lead">Create your account by providing required information below.</p>
+        <h2 th:text="#{label.registrationTitle}"></h2>
+        <p class="lead" th:text="#{label.registrationDesc}"></p>
     </div>
 
     <div class="inline-block col-sm-6 mx-auto">
         <form action="#" class="needs-validation" novalidate th:action="@{/registerUser}" th:object="${user}" method="post">
             <div class="col-12">
-                <label for="username" class="form-label">Username</label>
+                <label for="username" class="form-label" th:text="#{label.username}"></label>
                 <div class="input-group has-validation">
-                    <input type="text" class="form-control" id="username" placeholder="Username" required field="*{username}" name="username">
-                    <div class="invalid-feedback">
-                        Your username is required.
-                    </div>
+                    <input type="text" class="form-control" id="username" th:placeholder="#{label.username}" required field="*{username}" name="username">
+                    <div class="invalid-feedback" th:text="#{label.invalidUsername}"></div>
                 </div>
             </div>
 
             <div class="col-12">
-                <label for="email" class="form-label">Email <span class="text-muted"></span></label>
+                <label for="email" class="form-label" th:text="#{label.mail}"><span class="text-muted"></span></label>
                 <input type="email" class="form-control" id="email" placeholder="you@example.com" required field="*{email}" name="email">
-                <div class="invalid-feedback">
-                    Please enter a valid email address.
-                </div>
+                <div class="invalid-feedback" th:text="#{label.invalidMail}"></div>
             </div>
 
             <div class="col-12">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" required field="*{password}" name="password">
-                <div class="invalid-feedback">
-                    Please enter non-empty password.
-                </div>
+                <label for="password" class="form-label" th:text="#{label.password}"></label>
+                <input type="password" class="form-control" id="password" required field="*{password}" name="password" th:placeholder="#{label.password}">
+                <div class="invalid-feedback" th:text="#{label.invalidPassword}"></div>
             </div>
 
             <hr class="my-4">
-            <button class="w-100 btn btn-primary btn-lg" type="submit">Create your account</button>
+            <button class="w-100 btn btn-primary btn-lg" type="submit" th:text="#{label.createAcc}"></button>
         </form>
     </div>
 </div>

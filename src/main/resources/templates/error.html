@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <title>Registration</title>
+</head>
+<body class="bg-light">
+    <div th:replace="~{fragments/flashMessage :: flashMessage}"></div>
+        <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+        <div class="container-fluid">
+            <div class="row">
+
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div th:replace="~{fragments/footer :: footer}"></div>
+                </div>
+            </div>
+    </div>
+
+<script th:src="@{/css/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/css/sidebars.js}"></script>
+
+</body>
+</html>

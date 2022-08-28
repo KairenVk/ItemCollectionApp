@@ -2,6 +2,8 @@ package Project.ItemCollections.Security;
 
 import Project.ItemCollections.Entities.User.Role;
 import Project.ItemCollections.Entities.User.User;
+import Project.ItemCollections.Repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +16,9 @@ import java.util.Set;
 public class AppUserDetails implements UserDetails {
 
     private User user;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public AppUserDetails(User user) {
         this.user = user;

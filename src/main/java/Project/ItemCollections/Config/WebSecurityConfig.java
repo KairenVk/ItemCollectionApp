@@ -1,8 +1,11 @@
 package Project.ItemCollections.Config;
 
+import Project.ItemCollections.Entities.Collection.Collection;
+import Project.ItemCollections.Entities.User.User;
 import Project.ItemCollections.Repositories.CollectionRepository;
 import Project.ItemCollections.Repositories.UserRepository;
 import Project.ItemCollections.Services.AppUserDetailsService;
+import Project.ItemCollections.Services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -12,9 +15,12 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 @Configuration
 @EnableWebSecurity
@@ -24,10 +30,10 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
     private UserRepository userRepository;
 
     @Autowired
-    private AuthenticatedUserService authenticatedUserService;
+    private CollectionRepository collectionRepository;
 
     @Autowired
-    private CollectionRepository collectionRepository;
+    private AuthService authService;
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -51,25 +57,34 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/admin")
-                .hasAuthority("ROLE_ADMIN")
+                    .antMatchers("/admin")
+                    .hasAuthority("ROLE_ADMIN")
+                    .and()
+                .authorizeRequests()
+                    .antMatchers("/collections", "/collection/create")
+                    .hasAuthority("ROLE_USER")
                 .and()
                 .authorizeRequests()
-                .antMatchers("/", "/main", "/registration", "/registerUser", "/search", "/usersCollections", "/collection/**", "/item/**").permitAll()
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                .anyRequest().authenticated()
-                .and()
+                    .antMatchers("collection/{id}/createItem", "collection/{id}/edit", "collection/{id}/delete").access("@AuthService.hasCollectionPermission(#id)")
+                    .and()
+                .authorizeRequests()
+                    .antMatchers("item/{id}/edit", "item/{id}/delete").access("@AuthService.hasItemPermission(#id)")
+                    .and()
+                .authorizeRequests()
+                    .antMatchers("/", "/main", "/registration", "/registerUser", "/search", "/usersCollections", "/collection/{id}/overview", "/item/{id}/overview", "/login*", "/uploads/**").permitAll()
+                    .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                    .anyRequest().authenticated()
+                    .and()
                 .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/main", true)
-                .permitAll()
-                .and()
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/main", true)
+                    .permitAll()
+                    .and()
                 .logout()
-                .permitAll();
+                    .permitAll();
     }
 }

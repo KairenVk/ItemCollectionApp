@@ -15,8 +15,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Transactional
 public class LoginController {
 
-    @Autowired
-    private AuthService authService;
     @GetMapping("/login")
     public String login(RedirectAttributes redirectAttributes) {
         return "login";

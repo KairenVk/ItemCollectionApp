@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:include="~{fragments/dataTable :: dataTable}">
     <div th:replace="~{fragments/header :: header}"></div>
-    <title>Admin Panel</title>
+    <title th:text="#{label.admin}"></title>
     <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
     <script>
         $(document).ready(function () {
@@ -19,20 +19,20 @@
     <nav th:replace="~{fragments/navbar :: navbar}"></nav>
     <div class="row">
         <form th:action="@{admin/editUsers}" th:object="${users}" method="post">
-                <button title="Block" type="submit" name="action" value="block" class="btn btn-warning">Block</button>
-                <button title="Unblock" type="submit" name="action" value="unblock" class="btn btn-success">Unblock</button>
-                <button title="Delete" type="submit" name="action" value="delete" class="btn btn-danger">Delete</button>
-                <button title="GrantAdmin" type="submit" name="action" value="grantAdmin" class="btn btn-primary">Add to admin</button>
-                <button title="RevokeAdmin" type="submit" name="action" value="revokeAdmin" class="btn btn-secondary">Remove from admin</button>
+                <button title="Block" type="submit" name="action" value="block" class="btn btn-warning" th:text="#{label.blockBtn}"></button>
+                <button title="Unblock" type="submit" name="action" value="unblock" class="btn btn-success" th:text="#{label.unblockBtn}"></button>
+                <button title="Delete" type="submit" name="action" value="delete" class="btn btn-danger" th:text="#{label.deleteBtn}"></button>
+                <button title="GrantAdmin" type="submit" name="action" value="grantAdmin" class="btn btn-primary" th:text="#{label.adminBtn}"></button>
+                <button title="RevokeAdmin" type="submit" name="action" value="revokeAdmin" class="btn btn-secondary" th:text="#{label.removeAdminBtn}"></button>
                 <table id="objectable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
                         <th><input type="checkbox" id="selectAll"/></th>
-                        <th>ID</th>
-                        <th>Username</th>
-                        <th>E-mail</th>
-                        <th>User status</th>
-                        <th>Roles</th>
+                        <th th:text="#{label.objectId}"></th>
+                        <th th:text="#{label.username}"></th>
+                        <th th:text="#{label.mail}"></th>
+                        <th th:text="#{label.userStatus}"></th>
+                        <th th:text="#{label.userRoles}"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -41,10 +41,13 @@
                         <td th:text="${user.id}"/>
                         <td th:text="${user.username}"/>
                         <td th:text="${user.email}"/>
-                        <td th:if="${user.blocked} == true" th:text="Blocked"/>
-                        <td th:if="${user.blocked} == false" th:text="Active"/>
+                        <td th:if="${user.blocked} == true" th:text="#{label.userBlocked}"/>
+                        <td th:if="${user.blocked} == false" th:text="#{label.userActive}"/>
                         <td>
-                            <span th:each="role: ${user.roles}" th:text="${role.name}+' '"></span>
+                            <span th:each="role: ${user.roles}">
+                                <span th:if="${role.name} == 'ROLE_USER' "th:text="#{label.roleUser}+','"></span>
+                                <span th:if="${role.name} == 'ROLE_ADMIN' "th:text="#{label.roleAdmin}"></span>
+                            </span>
                         </td>
 
 

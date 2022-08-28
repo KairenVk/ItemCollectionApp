@@ -18,9 +18,10 @@
             <tr>
                 <th class="col-1">ID</th>
                 <th class="col-2">Name</th>
-                <th class="col-6">Description</th>
+                <th class="col-5">Description</th>
                 <th class="col-2">Topic</th>
                 <th class="col-1">Creator</th>
+                <th class="col-1" sec:authorize="hasRole('ROLE_ADMIN')">Edit</th>
             </tr>
             </thead>
             <tbody>
@@ -30,6 +31,10 @@
                 <td th:text="${collection.description}"></td>
                 <td th:text="${collection.collectionTopic.topicName}"></td>
                 <td th:text="${collection.collectionOwner.username}"></td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a th:href="@{/collection/{collectionId}/edit(collectionId=${collection.id})}" class="btn btn-sm btn-warning" th:text="#{label.editBtn}"></a>
+                    <a th:href="@{/collection/{collectionId}/delete(collectionId=${collection.id})}" class="btn btn-sm btn-danger" th:text="#{label.deleteBtn}"></a>
+                </td>
             </tr>
             </tbody>
         </table>

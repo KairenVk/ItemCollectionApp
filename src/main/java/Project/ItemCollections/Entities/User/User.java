@@ -2,6 +2,7 @@ package Project.ItemCollections.Entities.User;
 
 import Project.ItemCollections.Entities.Item.Item;
 import Project.ItemCollections.Entities.Collection.Collection;
+import Project.ItemCollections.Entities.Item.ItemsComments;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -45,6 +46,9 @@ public class User implements Serializable {
 
     @OneToMany(mappedBy="collectionOwner")
     private List<Collection> ownedCollections;
+
+    @OneToMany(mappedBy="author")
+    private List<ItemsComments> commentsList;
 
     public Integer getId() {
         return id;
@@ -126,5 +130,13 @@ public class User implements Serializable {
 
     public void removeItemLike(Item item) {
         itemLikes.remove(item);
+    }
+
+    public List<ItemsComments> getCommentsList() {
+        return commentsList;
+    }
+
+    public void setCommentsList(List<ItemsComments> commentsList) {
+        this.commentsList = commentsList;
     }
 }

@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:replace="~{fragments/header :: header}"></div>
-    <title>Create a new collection</title>
+    <title th:text="#{label.collectionFormTitle}"></title>
 </head>
 <body class="bg-light">
     <nav th:replace="~{fragments/navbar :: navbar}"></nav>
@@ -10,23 +10,23 @@
     <div class="container-fluid">
         <div class="row">
             <div class="py-5 text-center">
-                <h2>Create a new collection</h2>
+                <h2 th:text="#{label.collectionFormTitle}"></h2>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
                 <div class="inline-block col-sm-6 mx-auto">
-                    <form class="needs-validation" novalidate th:action="@{/collection/create}" th:object="${collection}" method="post">
+                    <form class="needs-validation" novalidate  enctype="multipart/form-data" th:action="@{/collection/create}" th:object="${collection}" method="post">
                         <div class="mb-3">
-                            <label for="collectionCreateName" class="form-label">Name</label>
-                            <input type="text" name="name" placeholder="Name" required id="collectionCreateName" class="form-control"/>
+                            <label for="collectionCreateName" class="form-label" th:text="#{label.collectionName}"></label>
+                            <input type="text" name="name" th:placeholder="#{label.collectionName}" required id="collectionCreateName" class="form-control"/>
                         </div>
                         <div class="mb-3">
-                            <label for="collectionCreateDescription" class="form-label">Description</label>
-                            <textarea name="description" placeholder="Description" required id="collectionCreateDescription" class="form-control"></textarea>
+                            <label for="collectionCreateDescription" class="form-label" th:text="#{label.collectionDesc}"></label>
+                            <textarea name="description" th:placeholder="#{label.collectionDesc}" required id="collectionCreateDescription" class="form-control"></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="Topic" class="form-label">Topic</label>
+                            <label for="Topic" class="form-label" th:text="#{label.collectionTopic}"></label>
                             <select name="topicName" required id="Topic" class="form-select form-select-sm">
                                 <option th:each="topic : ${collectionTopics}"
                                         th:value="${topic.topicName}"
@@ -34,7 +34,12 @@
                                 </option>
                             </select>
                         </div>
+                        <div class="mb-3">
+                            <label for="image" class="form-label" th:text="#{label.collectionImage}"></label>
+                            <input type="file" name="image" id="image">
+                        </div>
                         <div class="mb-3 newFieldDiv" id="newFieldDiv">
+                            <label th:text="#{label.collectionAttrs}"></label>
                             <select name="fieldType">
                                 <option th:each="type : ${fieldTypes}"
                                         th:value="${type.nameType}"
@@ -43,11 +48,11 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <button type="button" class="col-sm-2 btn btn-primary" id="repeatFieldBtn" data-increment="1">Add field...</button>
+                            <button type="button" class="col-sm-2 btn btn-primary" id="repeatFieldBtn" data-increment="1" th:text="#{label.addFieldBtn}"></button>
                         </div>
                         <hr class="my-4">
-                        <button type="submit" class="btn-lg btn btn-primary">Submit</button>
-                        <a href="/collections" class="btn-lg btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn-lg btn btn-primary" th:text="#{label.collectionFormSend}"></button>
+                        <a href="/collections" class="btn-lg btn btn-secondary" th:text="#{label.cancelBtn}"></a>
                     </form>
                 </div>
             </div>

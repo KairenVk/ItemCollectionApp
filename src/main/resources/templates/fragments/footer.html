@@ -1,6 +1,23 @@
 <html>
     <footer th:fragment="footer" class="my-5 pt-5 text-muted text-center text-small">
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("#locales").change(function () {
+                    var selectedOption = $('#locales').val();
+                    if (selectedOption != ''){
+                        window.location.replace('?language=' + selectedOption);
+                    }
+                    });
+            });
+        </script>
         <p class="mb-1">&copy; Kamil Surdacki 2022</p>
+        <span th:text="#{lang.change}"></span>
+        <select id="locales">
+            <option value=""></option>
+            <option value="en" th:text="#{lang.en}"></option>
+            <option value="pl" th:text="#{lang.pl}"></option>
+        </select>
     </footer>
 </html>

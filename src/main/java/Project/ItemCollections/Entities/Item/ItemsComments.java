@@ -1,5 +1,7 @@
 package Project.ItemCollections.Entities.Item;
 
+import Project.ItemCollections.Entities.User.User;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,6 +16,9 @@ public class ItemsComments {
     @Column(columnDefinition = "TEXT")
     private String comment;
 
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User author;
     public Integer getId() {
         return id;
     }
@@ -36,5 +41,13 @@ public class ItemsComments {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 }
