@@ -4,7 +4,9 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,8 +17,8 @@ public class Tag {
     private Integer id;
     private String tagName;
     private Integer tagWeight;
-    @ManyToMany(mappedBy = "itemTags")
-    private Set<Item> items = new HashSet<>();
+    @OneToMany(mappedBy = "itemTag")
+    private List<ItemTags> items = new ArrayList<>();
 
     public Integer getTagWeight() {
         return tagWeight;
@@ -26,11 +28,11 @@ public class Tag {
         this.tagWeight = tagWeight;
     }
 
-    public Set<Item> getItems() {
+    public List<ItemTags> getItems() {
         return items;
     }
 
-    public void setItems(Set<Item> items) {
+    public void setItems(List<ItemTags> items) {
         this.items = items;
     }
 

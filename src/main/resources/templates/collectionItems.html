@@ -5,6 +5,7 @@
     <title th:text="#{label.collectionItemsTitle(${collection.name})}"></title>
 </head>
 <body class="bg-light">
+    <div th:replace="~{fragments/flashMessage :: flashMessage}"></div>
     <nav th:replace="~{fragments/navbar :: navbar}"></nav>
 
 <div class="container-fluid">
@@ -22,14 +23,14 @@
                     <span th:text="#{label.itemOwner(${collection.collectionOwner.username})}"></span>
                 </p>
             </div>
-            <div class="row">
+            <div class="row text-center">
                 <p class="text-center">
-                    <span th:text="#{label.collectionPageDesc(${collection.description})}"></span>
+                    <span class = "text-center" th:utext="#{label.collectionPageDesc(${collection.description})}"></span>
                 </p>
             </div>
-            <div class="row text-center">
+            <div class="row">
                 <a sec:authorize="isAuthenticated()"
-                   class="ms-4 my-2 btn btn-primary w-50 text-center inline-block"
+                   class="ms-4 my-2 btn btn-primary w-50 inline-block"
                    th:if="${collection.collectionOwner.username == #authentication.getPrincipal().getUsername() or #strings.contains(#authentication.getPrincipal().getAuthorities(), 'ROLE_ADMIN')}"
                    th:href="@{/collection/{id}/createItem(id=${collection.id})}"
                    th:text="#{label.addItemBtn}">
@@ -58,15 +59,15 @@
                     <td><a th:href="@{/item/{itemId}/overview(itemId=${item.id})}" th:text="${item.itemName}"></a></td>
                     <td>
                         <span th:block th:each="tag: ${item.itemTags}">
-                            <span class="bg-info rounded-pill p-1" th:text="${tag.tagName}"></span>
+                            <span class="bg-info rounded-pill p-1" th:text="${tag.itemTag.tagName}"></span>
                         </span>
                     </td>
                     <td>
                         <span  th:block th:each="field : ${item.customItemFields}" th:text="${field.customFieldsData.name}+': '+${field.fieldContent}+' '"></span>
                     </td>
                     <td sec:authorize="isAuthenticated()" th:if="${item.itemOwner.username == #authentication.getPrincipal().getUsername() or #strings.contains(#authentication.getPrincipal().getAuthorities(), 'ROLE_ADMIN')}">
-                        <a th:href="@{/item/{itemId}/edit(itemId=${item.id})}" class="btn btn-sm btn-warning" th:text="#{label.editBtn}"></a>
-                        <a th:href="@{/item/{itemId}/delete(itemId=${item.id})}" class="btn btn-sm btn-danger" th:text="#{label.deleteBtn}"></a>
+                        <a th:href="@{/collection/{collectionId}/item/{itemId}/edit(itemId=${item.id}, collectionId=${collection.id})}" class="btn btn-sm btn-warning" th:text="#{label.editBtn}"></a>
+                        <a th:href="@{/collection/{collectionId}/item/{itemId}/delete(itemId=${item.id}, collectionId=${collection.id})}" class="btn btn-sm btn-danger" th:text="#{label.deleteBtn}"></a>
                     </td>
                 </tr>
                 </tbody>

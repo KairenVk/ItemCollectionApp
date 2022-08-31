@@ -3,8 +3,7 @@ package Project.ItemCollections.Controllers;
 import Project.ItemCollections.Entities.Collection.Collection;
 import Project.ItemCollections.Entities.User.User;
 import Project.ItemCollections.Repositories.*;
-import Project.ItemCollections.Services.AuthService;
-import Project.ItemCollections.Services.CollectionService;
+import Project.ItemCollections.Services.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -41,10 +40,15 @@ public class CollectionController {
     @Autowired
     private FieldTypesRepository fieldTypesRepository;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private HtmlServiceImpl htmlService;
+
     @GetMapping("/collections")
     public ModelAndView getCollectionsPage() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findByUsername(((UserDetails) principal).getUsername());
+        User user = userService.getLoggedUser();
         ModelAndView modelAndView = new ModelAndView("collections");
         List<Collection> collectionList = collectionRepository.findByCollectionOwner(user);
         modelAndView.addObject("collections", collectionList);
@@ -66,7 +70,6 @@ public class CollectionController {
                                    @RequestParam(value="fieldNames[]", required = false) List<String> fieldNames,
                                    @RequestParam(value="customField[]", required = false) List<String> customFields,
                                    @RequestParam(value="image", required = false) MultipartFile file) {
-        System.out.println(file.getOriginalFilename());
         collectionService.createCollection(collection, topicName, fieldNames, customFields, file);
         redirectAttributes.addFlashAttribute("message", "Collection has been created!");
         return "redirect:/collections";
@@ -85,7 +88,7 @@ public class CollectionController {
     public String editCollection(RedirectAttributes redirectAttributes, @ModelAttribute Collection collection, @RequestParam(value="topicName") String topicName, @PathVariable("id") Integer id) {
         collectionService.editCollection(collection, id, topicName);
         redirectAttributes.addFlashAttribute("message", "Collection has been updated!");
-        return "redirect:/collections";
+        return "redirect:/collection/{id}/overview";
     }
 
     @GetMapping("/collection/{id}/delete")

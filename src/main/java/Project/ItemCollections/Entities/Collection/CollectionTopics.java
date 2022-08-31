@@ -1,10 +1,12 @@
 package Project.ItemCollections.Entities.Collection;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-public class CollectionTopics {
+public class CollectionTopics implements Serializable
+{
 
     @Id
     @Column(name="topic_id")

@@ -3,30 +3,32 @@ package Project.ItemCollections.Entities.Item;
 import Project.ItemCollections.Entities.Collection.Collection;
 import Project.ItemCollections.Entities.Collection.CollectionItemFields;
 import Project.ItemCollections.Entities.User.User;
+import Project.ItemCollections.Entities.User.UsersLikes;
+import Project.ItemCollections.Repositories.TagRepository;
+import org.hibernate.annotations.Cascade;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
-public class Item {
-
+public class Item implements Serializable
+{
+    @Autowired
+    @Transient
+    private TagRepository tagRepository;
     @Id
     @Column(name="item_id")
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
     private String itemName;
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "item_tags",
-            joinColumns = { @JoinColumn(name = "item_id") },
-            inverseJoinColumns = { @JoinColumn(name = "tag_id") }
-    )
-    private List<Tag> itemTags = new ArrayList<>();
+    @OneToMany(mappedBy="taggedItem")
+    private List<ItemTags> itemTags = new ArrayList<>();
 
-    @ManyToMany(mappedBy="itemLikes")
-    private List<User> usersWhoLiked;
+    @OneToMany(mappedBy="userWhoLiked")
+    private List<UsersLikes> usersWhoLiked;
 
     @OneToMany(mappedBy="item")
     private List<ItemsComments> comments = new ArrayList<>();
@@ -59,15 +61,15 @@ public class Item {
         this.itemName = itemName;
     }
 
-    public List<Tag> getItemTags() {
+    public List<ItemTags> getItemTags() {
         return itemTags;
     }
 
-    public void setItemTags(List<Tag> itemTags) {
+    public void setItemTags(List<ItemTags> itemTags) {
         this.itemTags = itemTags;
     }
 
-    public void addItemTag(Tag itemTag) {
+    public void addItemTag(ItemTags itemTag) {
         itemTags.add(itemTag);
     }
 
@@ -95,28 +97,12 @@ public class Item {
         this.itemOwner = itemOwner;
     }
 
-    public List getCustomItemFields() {
+    public List<CollectionItemFields> getCustomItemFields() {
         return customItemFields;
     }
 
     public void addCustomItemField(CollectionItemFields customField) {
         customItemFields.add(customField);
-    }
-
-    public void removeItemTags() {
-        itemTags.clear();
-    }
-
-    public List<User> getUsersWhoLiked() {
-        return usersWhoLiked;
-    }
-
-    public void setUsersWhoLiked(List<User> usersWhoLiked) {
-        this.usersWhoLiked = usersWhoLiked;
-    }
-
-    public void addUserWhoLiked(User user) {
-        usersWhoLiked.add(user);
     }
 
     public void setCustomItemFields(List<CollectionItemFields> customItemFields) {
@@ -129,5 +115,10 @@ public class Item {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+    @Override
+    public String toString()
+    {
+        return "Item{" + "id=" + id + ", itemName='" + itemName + '\'' + ", itemTags=" + itemTags + ", usersWhoLiked=" + usersWhoLiked + ", comments=" + comments + ", itemCollection=" + itemCollection + ", itemOwner=" + itemOwner + ", customItemFields=" + customItemFields + ", imageUrl='" + imageUrl + '\'' + '}';
     }
 }

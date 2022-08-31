@@ -1,18 +1,25 @@
 package Project.ItemCollections.Services;
 
+import Project.ItemCollections.Entities.Collection.Collection;
 import Project.ItemCollections.Entities.Item.Item;
+import Project.ItemCollections.Entities.Item.ItemTags;
 import Project.ItemCollections.Entities.Item.Tag;
 import Project.ItemCollections.Entities.User.User;
+import Project.ItemCollections.Entities.User.UsersLikes;
 import Project.ItemCollections.Repositories.*;
 import Project.ItemCollections.Entities.Item.ItemsComments;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
+@Transactional
 public class ItemService {
 
     @Autowired
@@ -39,36 +46,87 @@ public class ItemService {
     @Autowired
     private UserService userService;
 
-    public void addItem(Item item, Integer collectionId, List<String> tags, List<String> customFieldsNames, List<String> customFieldsValues, MultipartFile image) {
+    @Autowired
+    private ItemTagsRepository itemTagsRepository;
 
-        fileService.validateFile(image);
-        User loggedInUser = userService.getLoggedUser();
+    @Autowired
+    private CollectionItemFieldsRepository collectionItemFieldsRepository;
+
+    @Autowired
+    private UsersLikesRepository usersLikesRepository;
+
+    public void editItem(Item item, Integer itemId, Integer collectionId, List<String> tags, List<String> customFieldsNames, List<String> customFieldsValues, MultipartFile image) {
+
+        if (!image.isEmpty()) {
+            fileService.validateFile(image);
+        }
+
+        Item n = itemRepository.getById(itemId);
+
+        n.setItemName(item.getItemName());
+        String imageUrl = fileService.uploadFile(image, n.getId());
+        n.setImageUrl(imageUrl);
+        if(tags != null) {
+            itemTagsRepository.deleteByTaggedItem(n);
+            for (String tag: tags) {
+                Tag newTag = tagRepository.findByTagName(tag);
+                ItemTags itemTag = new ItemTags();
+                itemTag.setTaggedItem(n);
+                itemTag.setItemTag(newTag);
+                itemTagsRepository.save(itemTag);
+            }
+        }
+        itemRepository.save(n);
+        customFieldsService.updateItemCustomFields(n, customFieldsNames, customFieldsValues);
+
+
+    }
+    public void createItem(Item item, Integer collectionId, List<String> tags, List<String> customFieldsNames, List<String> customFieldsValues, MultipartFile image) {
+        if (!image.isEmpty()) {
+            fileService.validateFile(image);
+        }
 
         Item n = new Item();
-        n.setItemCollection(collectionRepository.getById(collectionId));
-        for (String tag : tags) {
-            Tag m = tagRepository.findByTagName(tag);
-            n.addItemTag(m);
+        Collection itemCollection = collectionRepository.getById(collectionId);
+        User loggedInUser = userService.getLoggedUser();
+        n.setItemOwner(loggedInUser);
+        n.setItemCollection(itemCollection);
+        n.setItemName(item.getItemName());
+        itemRepository.save(n);
+        if (tags != null) {
+            for (String tag : tags) {
+                Tag m = tagRepository.findByTagName(tag);
+                ItemTags newTag = new ItemTags();
+                newTag.setItemTag(m);
+                newTag.setTaggedItem(n);
+                itemTagsRepository.save(newTag);
+            }
         }
         n.setItemName(item.getItemName());
-        n.setItemOwner(loggedInUser);
-        itemRepository.save(n);
         String fileUrl = fileService.uploadFile(image, n.getId());
         n.setImageUrl(fileUrl);
         itemRepository.save(n);
-        collectionRepository.getById(collectionId).addItemToCollection(n);
+        itemCollection.addItemToCollection(n);
         if(customFieldsNames != null && customFieldsValues != null)
-            customFieldsService.CreateItemCustomFields(n, customFieldsNames, customFieldsValues);
+            customFieldsService.createItemCustomFields(n, customFieldsNames, customFieldsValues);
     }
-    public void likeItem(Integer id) {
+
+    public void likeItem(Integer itemId) {
         User loggedInUser = userService.getLoggedUser();
+        Item item = itemRepository.getById(itemId);
+        if(usersLikesRepository.findByLikedItemAndUserWhoLiked(item,loggedInUser) == null) {
+            UsersLikes like = new UsersLikes();
+            like.setLikedItem(item);
+            like.setUserWhoLiked(loggedInUser);
+            usersLikesRepository.save(like);
+        }
 
-        if(!loggedInUser.getItemLikes().contains(itemRepository.getById(id)))
-            loggedInUser.addItemLike(itemRepository.getById(id));
     }
 
-    public void dislikeItem(Integer id) {
-        userService.getLoggedUser().removeItemLike(itemRepository.getById(id));
+    public void dislikeItem(Integer itemId) {
+        User loggedInUser = userService.getLoggedUser();
+        Item item = itemRepository.getById(itemId);
+        usersLikesRepository.deleteByLikedItemAndUserWhoLiked(item, loggedInUser);
     }
 
     public void addComment(String comment, Integer itemId) {
@@ -79,5 +137,13 @@ public class ItemService {
         n.setComment(comment);
         n.setAuthor(loggedInUser);
         itemsCommentsRepository.save(n);
+    }
+
+    public void deleteItem(Integer collectionId, Integer itemId) {
+        Item item = itemRepository.getById(itemId);
+        itemTagsRepository.deleteByTaggedItem(item);
+        collectionItemFieldsRepository.deleteByItemId(item);
+        usersLikesRepository.deleteByLikedItem(item);
+        itemRepository.delete(item);
     }
 }

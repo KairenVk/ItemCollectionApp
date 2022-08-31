@@ -2,21 +2,74 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:replace="~{fragments/header :: header}"></div>
+    <link rel="stylesheet" th:href="@{/css/jqcloud.min.css}" />
     <title>Registration</title>
 </head>
 <body class="bg-light">
 <div th:replace="~{fragments/flashMessage :: flashMessage}"></div>
 <nav th:replace="~{fragments/navbar :: navbar}"></nav>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-12">
-            <div th:replace="~{fragments/footer :: footer}"></div>
+<div class="container">
+    <div class="row my-2 gx-3">
+        <div class="col">
+            <div class="shadow p-2 bg-body rounded">
+                <table class="table table-striped table-hover">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th class="col-6" th:text="#{label.itemName}"></th>
+                            <th class="col-3" th:text="#{label.collection}"></th>
+                            <th class="col-3" th:text="#{label.author}"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item: ${latestItems}">
+                            <td><a th:href="@{/item/{itemId}/overview(itemId=${item.id})}" th:text="${item.itemName}"></a></td>
+                            <td><a th:href="@{/collection/{collectionId}/overview(collectionId=${item.itemCollection.id})}" th:text="${item.itemCollection.name}"></a></td>
+                            <td th:text="${item.itemOwner.username}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
+        <div class="col">
+            <div class="shadow p-2 bg-body rounded">
+                <table class="table table-striped table-hover">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th class="col-8" th:text="#{label.collectionName}"></th>
+                            <th class="col-4" th:text="#{label.collectionItemsCount}"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="collection, iStat: ${largestCollections}">
+                            <td><a th:href="@{/collection/{collectionId}/overview(collectionId=${collection.id})}" th:text="${collection.name}"></a></td>
+                            <td th:text="${itemCounts[iStat.index]}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div id="tagCloud"></div>
     </div>
 </div>
 
+<div th:replace="~{fragments/footer :: footer}"></div>
 <script th:src="@{/css/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/css/sidebars.js}"></script>
+<script th:src="@{/js/jqcloud.min.js}"></script>
+
+<script th:inline="javascript">
+$(document).ready(() => {
+    /*<![CDATA[*/
+        let words = /*[[${tags}]]*/ [];
+    /*]]>*/
+
+    $('#tagCloud').jQCloud(words, {
+      height: 350
+    });
+});
+</script>
 
 </body>
 </html>

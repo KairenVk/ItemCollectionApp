@@ -1,6 +1,7 @@
 package Project.ItemCollections.Entities.Collection;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,7 +23,7 @@ public class CollectionCustomFieldsData {
     private Collection collection;
 
     @OneToMany (mappedBy="customFieldsData")
-    private Set<CollectionItemFields> customField;
+    private List<CollectionItemFields> customField;
 
     public Integer getId() {
         return id;
@@ -56,14 +57,14 @@ public class CollectionCustomFieldsData {
         this.collection = collection;
     }
 
-    public Set<CollectionItemFields> getCustomField() {
+    public List<CollectionItemFields> getCustomField() {
         return customField;
     }
 
     public void addCustomField(CollectionItemFields customField) {
         this.customField.add(customField);
     }
-    public void setCustomField(Set<CollectionItemFields> customField) {
+    public void setCustomField(List<CollectionItemFields> customField) {
         this.customField = customField;
     }
 }

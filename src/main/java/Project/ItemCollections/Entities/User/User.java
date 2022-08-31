@@ -35,14 +35,8 @@ public class User implements Serializable {
     )
     private List<Role> roles = new ArrayList<>();
 
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @JoinTable(
-            name = "users_likes",
-            joinColumns = { @JoinColumn(name = "user_id") },
-            inverseJoinColumns = { @JoinColumn(name = "item_id") }
-    )
-    private List<Item> itemLikes = new ArrayList<>();
+    @OneToMany(mappedBy="userWhoLiked")
+    private List<UsersLikes> itemLikes = new ArrayList<>();
 
     @OneToMany(mappedBy="collectionOwner")
     private List<Collection> ownedCollections;
@@ -96,17 +90,6 @@ public class User implements Serializable {
     public void removeRole(Role role) {
         roles.remove(role);
     }
-    public List<Item> getItemLikes() {
-        return itemLikes;
-    }
-
-    public void setItemLikes(List<Item> itemLikes) {
-        this.itemLikes = itemLikes;
-    }
-
-    public void addItemLike(Item item) {
-        itemLikes.add(item);
-    }
 
     public Boolean getBlocked() {
         return blocked;
@@ -138,5 +121,13 @@ public class User implements Serializable {
 
     public void setCommentsList(List<ItemsComments> commentsList) {
         this.commentsList = commentsList;
+    }
+
+    public List<UsersLikes> getItemLikes() {
+        return itemLikes;
+    }
+
+    public void setItemLikes(List<UsersLikes> itemLikes) {
+        this.itemLikes = itemLikes;
     }
 }

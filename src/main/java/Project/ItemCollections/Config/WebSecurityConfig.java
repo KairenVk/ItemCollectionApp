@@ -2,6 +2,7 @@ package Project.ItemCollections.Config;
 
 import Project.ItemCollections.Entities.Collection.Collection;
 import Project.ItemCollections.Entities.User.User;
+import Project.ItemCollections.Handlers.CustomAccessDeniedHandler;
 import Project.ItemCollections.Repositories.CollectionRepository;
 import Project.ItemCollections.Repositories.UserRepository;
 import Project.ItemCollections.Services.AppUserDetailsService;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,6 +22,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.stereotype.Component;
 
 @Configuration
@@ -54,6 +58,12 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new CustomAccessDeniedHandler();
+    }
+
+
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -69,13 +79,13 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
                     .hasAuthority("ROLE_USER")
                 .and()
                 .authorizeRequests()
-                    .antMatchers("collection/{id}/createItem", "collection/{id}/edit", "collection/{id}/delete").access("@AuthService.hasCollectionPermission(#id)")
+                    .antMatchers("/collection/{id}/createItem", "/collection/{id}/edit", "/collection/{id}/delete").access("@authService.hasCollectionPermission(#id)")
                     .and()
                 .authorizeRequests()
-                    .antMatchers("item/{id}/edit", "item/{id}/delete").access("@AuthService.hasItemPermission(#id)")
+                    .antMatchers("/item/{id}/edit", "/item/{id}/delete").access("@authService.hasItemPermission(#id)")
                     .and()
                 .authorizeRequests()
-                    .antMatchers("/", "/main", "/registration", "/registerUser", "/search", "/usersCollections", "/collection/{id}/overview", "/item/{id}/overview", "/login*", "/uploads/**").permitAll()
+                .antMatchers("/", "/main", "/registration", "/registerUser", "/search", "/usersCollections", "/collection/{id}/overview", "/item/{id}/overview", "/login*", "/uploads/**", "/tags", "/comments").permitAll()
                     .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                     .anyRequest().authenticated()
                     .and()
@@ -85,6 +95,8 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
                     .permitAll()
                     .and()
                 .logout()
-                    .permitAll();
+                    .permitAll()
+                    .and()
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
     }
 }

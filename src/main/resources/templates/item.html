@@ -20,8 +20,8 @@
                         <div class="container">
                             <div class="row">
                                 <h2 th:text="${item.itemName}" class="text-center"></h2>
-                                <a sec:authorize="isAuthenticated()" th:if="${!#lists.contains(item.usersWhoLiked, user)}"class="text-center" th:href="@{/item/{itemId}/overview/likeItem(itemId=${item.id})}"><img th:src="@{/img/like.svg}" th:text="#{label.addLike}"></a>
-                                <a sec:authorize="isAuthenticated()" th:if="${#lists.contains(item.usersWhoLiked, user)}" class="text-center" th:href="@{/item/{itemId}/overview/dislikeItem(itemId=${item.id})}"><img th:src="@{/img/like.svg}" th:text="#{label.removeLike}"></a>
+                                <a sec:authorize="isAuthenticated()" th:if="${!#lists.contains(likes, user)}"class="text-center" th:href="@{/item/{itemId}/overview/likeItem(itemId=${item.id})}"><img th:src="@{/img/like.svg}" th:text="#{label.addLike}"></a>
+                                <a sec:authorize="isAuthenticated()" th:if="${#lists.contains(likes, user)}" class="text-center" th:href="@{/item/{itemId}/overview/dislikeItem(itemId=${item.id})}"><img th:src="@{/img/like.svg}" th:text="#{label.removeLike}"></a>
                             </div>
                             <div class="row">
                                 <p class="text-center fs-6 fst-italic">
@@ -34,9 +34,9 @@
                         </div>
                         <hr class="my-2">
                         <span th:text="#{label.itemPageId(${item.id})}"></span><br/>
-                        <span th:text="#{label.itemPageLikes(${#lists.size(item.usersWhoLiked)})}"></span><br/>
+                        <span th:text="#{label.itemPageLikes(${#lists.size(likes)})}"></span><br/>
                         <span th:text="#{label.itemPageTags}"></span>
-                        <span th:each="tag : ${item.itemTags}" th:text="${tag.tagName}+', '"></span><br/><br/>
+                        <span th:each="tag : ${item.itemTags}" th:text="${tag.itemTag.tagName}+', '"></span><br/><br/>
                         <span th:block th:each="field : ${item.customItemFields}">
                             <span th:if="${field.customFieldsData.fieldType.nameType} != 'Boolean'"th:inline="text">[[${field.customFieldsData.name}]]: [[${field.fieldContent}]]</span>
                             <span th:if="${field.customFieldsData.fieldType.nameType} == 'Boolean'" th:inline="text">[[${field.customFieldsData.name}]]: </span>
@@ -63,17 +63,23 @@
                         </form>
                     </div>
                 </div>
-                <div class="comments" th:each="comment : ${comments}">
-                    <div class="container">
-                        <div class="row">
-                            <hr>
-                            <div class="col-sm-3">
-                                <h4 th:text="${comment.author.username}"></h4>
-                            </div>
-                            <div class="col-sm-9">
-                                <p th:text="${comment.comment}"></p>
-                            </div>
-                        </div>
+                <div class="container">
+                    <div class="row">
+                        <hr>
+                        <table id="itemComments" th:data-item-id="${item.id}" th:data-latest-comment-id="${latestCommentId}" class="table table-striped text-wrap text-break">
+                            <thead>
+                                <tr>
+                                    <th class="col-3"></th>
+                                    <th class="col-9"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="userComments">
+                                <tr class="comment" th:each="comment : ${comments}">
+                                    <td><h4 th:text="${comment.author.username}"></h4></td>
+                                    <td><p th:text="${comment.comment}"></p></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -83,5 +89,6 @@
 
         <script th:src="@{/css/bootstrap.bundle.min.js}"></script>
         <script th:src="@{/css/sidebars.js}"></script>
+        <script th:src="@{/js/commentsAutorefresh.js}"></script>
     </body>
 </html>

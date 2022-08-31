@@ -32,11 +32,9 @@ public class Collection implements Serializable {
     private CollectionTopics collectionTopic;
 
     @OneToMany(mappedBy="collection")
-    @OnDelete(action= OnDeleteAction.CASCADE)
-    private Set<CollectionCustomFieldsData> customFields = new HashSet<>();
+    private Set<CollectionCustomFieldsData> customFieldsData = new HashSet<>();
 
     @OneToMany(mappedBy="itemCollection")
-    @OnDelete(action= OnDeleteAction.CASCADE)
     private Set<Item> itemsInCollection = new HashSet<>();
 
     private String imageUrl;
@@ -81,12 +79,12 @@ public class Collection implements Serializable {
         this.collectionTopic = collectionTopic;
     }
 
-    public Set<CollectionCustomFieldsData> getCustomFields() {
-        return customFields;
+    public Set<CollectionCustomFieldsData> getCustomFieldsData() {
+        return customFieldsData;
     }
 
-    public void setCustomFields(Set<CollectionCustomFieldsData> customFields) {
-        this.customFields = customFields;
+    public void setCustomFieldsData(Set<CollectionCustomFieldsData> customFieldsData) {
+        this.customFieldsData = customFieldsData;
     }
 
     public User getCollectionOwner() {
@@ -110,7 +108,7 @@ public class Collection implements Serializable {
     }
 
     public void addFieldToCollection(CollectionCustomFieldsData customfield) {
-        customFields.add(customfield);
+        customFieldsData.add(customfield);
     }
     @Override
     public String toString()

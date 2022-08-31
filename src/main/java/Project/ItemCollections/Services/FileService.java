@@ -7,6 +7,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.Objects;
+
 @Service
 public class FileService {
 
@@ -18,17 +20,20 @@ public class FileService {
 
 
     public String uploadFile(MultipartFile file, Integer id) {
-        String name = storageService.store(file, id);
+        if (!file.isEmpty()) {
+            String name = storageService.store(file, id);
 
-        String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/uploads/")
-                .path(name)
-                .toUriString();
-        return uri;
+            String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/uploads/")
+                    .path(name)
+                    .toUriString();
+            return uri;
+        }
+        return "";
     }
 
     public void validateFile(MultipartFile file) {
-        String filename = StringUtils.cleanPath(file.getOriginalFilename());
+        String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         if (file.isEmpty()) {
             throw new StorageException("Failed to store empty file " + filename);
         }
@@ -39,7 +44,7 @@ public class FileService {
                             + filename);
         }
         if (!FilenameUtils.getExtension(filename).equals("png") && !FilenameUtils.getExtension(filename).equals("jpg")) {
-            throw new StorageException("Wrong file extension!");
+            throw new StorageException("Wrong file extension " + filename);
         }
     }
 

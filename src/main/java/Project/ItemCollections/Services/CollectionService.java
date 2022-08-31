@@ -45,10 +45,19 @@ public class CollectionService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private HtmlServiceImpl htmlService;
+
+    @Autowired
+    private ItemTagsRepository itemTagsRepository;
+
     public void createCollection(Collection collection, String topicName, List<String> fieldNames, List<String> customFields, MultipartFile image) {
 
-        fileService.validateFile(image);
-        System.out.println("image OK");
+        if (image != null) {
+            fileService.validateFile(image);
+        }
+
         User loggedInUser = userService.getLoggedUser();
 
         CollectionTopics topic = collectionTopicsRepository.findByTopicName(topicName);
@@ -57,7 +66,7 @@ public class CollectionService {
         n.setCollectionOwner(loggedInUser);
         n.setName(collection.getName());
         n.setCollectionTopic(topic);
-        n.setDescription(collection.getDescription());
+        n.setDescription(htmlService.markdownToHtml(collection.getDescription()));
         collectionRepository.save(n);
         String imageUrl = fileService.uploadFile(image, n.getId());
         n.setImageUrl(imageUrl);
@@ -94,7 +103,7 @@ public class CollectionService {
         topic.removeTopicCollection(n);
         Set<Item> items = n.getItemsInCollection();
         for (Item item : items) {
-            item.removeItemTags();
+            itemTagsRepository.deleteByTaggedItem(item);
             collectionItemFieldsRepository.deleteByItemId(item);
             itemRepository.delete(item);
         }

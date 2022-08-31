@@ -9,4 +9,8 @@ import java.util.List;
 public interface ItemsCommentsRepository extends CrudRepository<ItemsComments, Integer> {
 
     public List<ItemsComments> findByItem(Item item);
+
+    public List<ItemsComments> findAllByItemAndIdGreaterThan(Item item, Integer id);
+
+    public void deleteByItem(Item item);
 }

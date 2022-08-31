@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:include="~{fragments/dataTable :: dataTable}">
+<head>
     <div th:replace="~{fragments/header :: header}"></div>
     <title>Collection</title>
 </head>
@@ -28,7 +28,7 @@
             <tr th:each="collection: ${collections}">
                 <td th:text="${collection.id}"></td>
                 <td><a th:href="@{/collection/{collectionId}/overview(collectionId=${collection.id})}" th:text="${collection.name}"></a></td>
-                <td th:text="${collection.description}"></td>
+                <td th:utext="${collection.description}"></td>
                 <td th:text="${collection.collectionTopic.topicName}"></td>
                 <td th:text="${collection.collectionOwner.username}"></td>
                 <td sec:authorize="hasRole('ROLE_ADMIN')">
@@ -41,8 +41,8 @@
     </div>
 </div>
 
+<div th:replace="~{fragments/dataTable :: dataTable}"></div>
 <div th:replace="~{fragments/footer :: footer}"></div>
-
 <script th:src="@{/css/bootstrap.bundle.min.js}"></script>
 
 </body>

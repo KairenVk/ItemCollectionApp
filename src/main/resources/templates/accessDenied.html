@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <title>Registration</title>
+</head>
+<body class="bg-light">
+<div th:replace="~{fragments/flashMessage :: flashMessage}"></div>
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <div class="row">
+                <h1> Access denied</h1>
+            </div>
+            <div class="row">
+                <h3>Missing permissions to access that page!</h3>
+            </div>
+            <div th:replace="~{fragments/footer :: footer}"></div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/css/bootstrap.bundle.min.js}"></script>
+
+</body>
+</html>
