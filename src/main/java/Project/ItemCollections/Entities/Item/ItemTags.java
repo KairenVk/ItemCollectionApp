@@ -8,7 +8,8 @@ public class ItemTags implements Serializable {
 
     @Id
     @Column(name="itemtag_id")
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="itemTags_generator")
+    @SequenceGenerator(name="heroku_d95adc693c777bb", sequenceName = "itemTags_seq")
     private Integer id;
     @ManyToOne
     @JoinColumn(name="item_id", nullable = false)

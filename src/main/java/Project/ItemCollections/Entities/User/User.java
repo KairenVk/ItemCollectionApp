@@ -18,7 +18,8 @@ public class User implements Serializable {
 
     @Id
     @Column(name="user_id")
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="user_generator")
+    @SequenceGenerator(name="heroku_d95adc693c777bb", sequenceName = "user_seq")
     private Integer id;
     private String username;
     private String email;

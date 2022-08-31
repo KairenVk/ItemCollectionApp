@@ -13,7 +13,8 @@ import java.util.Set;
 public class Tag {
     @Id
     @Column(name="tag_id")
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="tag_generator")
+    @SequenceGenerator(name="heroku_d95adc693c777bb", sequenceName = "tag_seq")
     private Integer id;
     private String tagName;
     private Integer tagWeight;

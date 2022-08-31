@@ -9,7 +9,8 @@ public class CollectionItemFields {
 
     @Id
     @Column(name="collectionItemField_id")
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="collectionItemFields_generator")
+    @SequenceGenerator(name="heroku_d95adc693c777bb", sequenceName = "collectionItemFields_seq")
     private Integer id;
 
     @ManyToOne

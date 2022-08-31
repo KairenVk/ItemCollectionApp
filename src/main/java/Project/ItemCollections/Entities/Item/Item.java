@@ -21,7 +21,8 @@ public class Item implements Serializable
     private TagRepository tagRepository;
     @Id
     @Column(name="item_id")
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="item_generator")
+    @SequenceGenerator(name="heroku_d95adc693c777bb", sequenceName = "item_seq")
     private Integer id;
     private String itemName;
     @OneToMany(mappedBy="taggedItem")

@@ -15,7 +15,8 @@ public class Collection implements Serializable {
 
     @Id
     @Column(name="collection_id")
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="collection_generator")
+    @SequenceGenerator(name="heroku_d95adc693c777bb", sequenceName = "collection_seq")
     private Integer id;
 
     @ManyToOne

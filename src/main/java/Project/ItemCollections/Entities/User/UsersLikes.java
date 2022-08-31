@@ -8,7 +8,8 @@ import javax.persistence.*;
 public class UsersLikes {
     @Id
     @Column(name="userslikes_id")
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="userLikes_generator")
+    @SequenceGenerator(name="heroku_d95adc693c777bb", sequenceName = "userLikes_seq")
     private Integer id;
 
     @ManyToOne
