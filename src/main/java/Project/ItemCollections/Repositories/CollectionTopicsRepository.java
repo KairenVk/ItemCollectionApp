@@ -7,6 +7,5 @@ import org.springframework.stereotype.Component;
 @Component
 public interface CollectionTopicsRepository extends CrudRepository <CollectionTopics, Integer> {
 
-    public CollectionTopics findByTopicName(String topicName);
-
+    CollectionTopics findByTopicName(String topicName);
 }

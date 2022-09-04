@@ -14,22 +14,22 @@ import java.util.Map;
 
 @Component
 public interface ItemRepository extends CrudRepository<Item, Integer> {
-    public List<Item> findByItemOwner(User user);
+    List<Item> findByItemOwner(User user);
 
-    public List<Item> findByItemCollection(Collection collection);
+    List<Item> findByItemCollection(Collection collection);
 
-    public Item getById(Integer id);
+    Item getById(Integer id);
 
     @Modifying
     @Query(
             value = "select * from item order by item_id desc limit 5",
             nativeQuery = true
     )
-    public List<Item> findLatestItems();
+    List<Item> findLatestItems();
 
     @Query(
             value = "select collection_id, count(collection_id) as ItemCount from item group by collection_id order by count(collection_id) desc limit 5",
             nativeQuery = true
     )
-    public List<Object[]> findLargestCollections();
+    List<Object[]> findLargestCollections();
 }

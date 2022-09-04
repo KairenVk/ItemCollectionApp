@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:include="~{fragments/dataTable :: dataTable}">
+<head>
     <div th:replace="~{fragments/header :: header}"></div>
+    <div th:replace="~{fragments/dataTable :: dataTable}"></div>
     <title th:text="#{label.collectionItemsTitle(${collection.name})}"></title>
 </head>
 <body class="bg-light">
@@ -63,7 +64,7 @@
                         </span>
                     </td>
                     <td>
-                        <span  th:block th:each="field : ${item.customItemFields}" th:text="${field.customFieldsData.name}+': '+${field.fieldContent}+' '"></span>
+                        <span  th:block th:each="field : ${item.collectionsFieldsData}" th:text="${field.collectionField.name}+': '+${field.fieldContent}+' '"></span>
                     </td>
                     <td sec:authorize="isAuthenticated()" th:if="${item.itemOwner.username == #authentication.getPrincipal().getUsername() or #strings.contains(#authentication.getPrincipal().getAuthorities(), 'ROLE_ADMIN')}">
                         <a th:href="@{/collection/{collectionId}/item/{itemId}/edit(itemId=${item.id}, collectionId=${collection.id})}" class="btn btn-sm btn-warning" th:text="#{label.editBtn}"></a>
@@ -76,8 +77,5 @@
 </div>
 
     <div th:replace="~{fragments/footer :: footer}"></div>
-
-    <script th:src="@{/css/bootstrap.bundle.min.js}"></script>
-    <script th:src="@{/css/sidebars.js}"></script>
 </body>
 </html>

@@ -10,6 +10,6 @@ import java.util.List;
 @Component
 public interface CollectionRepository extends CrudRepository<Collection, Integer>
 {
-    public List<Collection> findByCollectionOwner(User user);
-    public Collection getById(Integer id);
+    List<Collection> findByCollectionOwner(User user);
+    Collection getById(Integer id);
 }

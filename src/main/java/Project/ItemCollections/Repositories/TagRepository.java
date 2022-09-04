@@ -11,11 +11,11 @@ import java.util.List;
 @Component
 public interface TagRepository extends CrudRepository<Tag, Integer> {
 
-    public Tag findByTagName(String tagName);
+    Tag findByTagName(String tagName);
     @Modifying
     @Query(
             value = "select * from tag where tag_name like %:term%",
             nativeQuery = true
     )
-    public List<Tag> findAllByTagName(String term);
+    List<Tag> findAllByTagName(String term);
 }

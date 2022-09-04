@@ -31,7 +31,7 @@
                     </div>
                     <div id="itemTags">
                         <div th:each="tag, iStat : ${item?.itemTags}" class="tagsDiv mb-3" th:attr="id=tagsDiv_+${iStat.count}">
-                            <input type="text" th:value="${tag.tagName}" name="tags[]">
+                            <input type="text" th:value="${tag.itemTag.tagName}" name="tags[]">
                             <button type="button" class="btn btn-danger removeTagBtn" th:attr="data-id=tagsDiv_+${iStat.count}">Remove</button>
                         </div>
                     </div>
@@ -41,30 +41,30 @@
                     <div>
                         <label class="form-label">Collection Fields:</label>
                     </div>
-                    <div th:each="customField: ${item?.customItemFields}" th:switch="${customField.customFieldsData.fieldType.nameType}">
+                    <div th:each="customField: ${item?.collectionsFieldsData}" th:switch="${customField.collectionField.fieldType.nameType}">
                         <div th:case="'String'">
-                            <label class="form-label" th:text="${customField.customFieldsData.name}+': '"></label>
-                            <input type="hidden" th:value="${customField.customFieldsData.name}"  name="customFieldsNames[]">
+                            <label class="form-label" th:text="${customField.collectionField.name}+': '"></label>
+                            <input type="hidden" th:value="${customField.collectionField.name}"  name="customFieldsNames[]">
                             <input type="text" th:value="${#lists.size(customField) != 0}? @{${customField.fieldContent}} : ''" name="customFieldsValues[]">
                         </div>
                         <div th:case="'Integer'">
-                            <label class="form-label" th:text="${customField.customFieldsData.name}+': '"></label>
-                            <input type="hidden" th:value="${customField.customFieldsData.name}"  name="customFieldsNames[]">
+                            <label class="form-label" th:text="${customField.collectionField.name}+': '"></label>
+                            <input type="hidden" th:value="${customField.collectionField.name}"  name="customFieldsNames[]">
                             <input type="number" th:value="${#lists.size(customField) != 0}? @{${customField.fieldContent}} : ''" name="customFieldsValues[]">
                         </div>
                         <div  th:case="'Date'">
-                            <label class="form-label" th:text="${customField.customFieldsData.name}+': '"></label>
-                            <input type="hidden" th:value="${customField.customFieldsData.name}"  name="customFieldsNames[]">
+                            <label class="form-label" th:text="${customField.collectionField.name}+': '"></label>
+                            <input type="hidden" th:value="${customField.collectionField.name}"  name="customFieldsNames[]">
                             <input type="date" th:value="${#lists.size(customField) != 0}? @{${customField.fieldContent}} : ''" name="customFieldsValues[]">
                         </div>
                         <div th:case="'Boolean'">
-                            <label class="form-label" th:text="${customField.customFieldsData.name}+': '"></label>
-                            <input type="hidden" th:value="${customField.customFieldsData.name}"  name="customFieldsNames[]">
+                            <label class="form-label" th:text="${customField.collectionField.name}+': '"></label>
+                            <input type="hidden" th:value="${customField.collectionField.name}"  name="customFieldsNames[]">
                             <input type="hidden" th:value="${#lists.size(customField) != 0}? @{${customField.fieldContent}} : ''" name="customFieldsValues[]"><input type="checkbox" th:checked="${#lists.size(customField.customField) != 0}? 'checked' : ''" onclick="this.previousSibling.value=1-this.previousSibling.value">
                         </div>
                         <div th:case="'Text'">
-                            <label class="form-label" th:text="${customField.customFieldsData.name}+': '"></label>
-                            <input type="hidden" th:value="${customField.customFieldsData.name}"  name="customFieldsNames[]">
+                            <label class="form-label" th:text="${customField.collectionField.name}+': '"></label>
+                            <input type="hidden" th:value="${customField.collectionField.name}"  name="customFieldsNames[]">
                             <textarea name="customFieldsValues[]" th:text="${#lists.size(customField) != 0}? @{${customField.fieldContent}} : ''"></textarea>
                         </div>
                     </div>
@@ -107,9 +107,6 @@
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
-
-<script th:src="@{/css/bootstrap.bundle.min.js}"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script th:src="@{/js/tagAutocomplete.js}"></script>
 <script th:src="@{/js/addTag.js}"></script>

@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:include="~{fragments/dataTable :: dataTable}">
+<head>
     <div th:replace="~{fragments/header :: header}"></div>
+    <div th:replace="~{fragments/dataTable :: dataTable}"></div>
     <title th:text="#{label.collections}"></title>
 </head>
 <body class="bg-light">
@@ -38,8 +39,5 @@
     </div>
 
     <div th:replace="~{fragments/footer :: footer}"></div>
-
-    <script th:src="@{/css/bootstrap.bundle.min.js}"></script>
-
 </body>
 </html>

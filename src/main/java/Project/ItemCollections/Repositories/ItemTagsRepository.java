@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface ItemTagsRepository extends CrudRepository<ItemTags, Integer> {
 
-    public void deleteByTaggedItem(Item item);
+    void deleteByTaggedItem(Item item);
 }

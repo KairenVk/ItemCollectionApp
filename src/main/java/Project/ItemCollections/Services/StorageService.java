@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.core.io.Resource;
 
+import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
@@ -14,11 +15,7 @@ public interface StorageService {
 
     String store(MultipartFile file, Integer id);
 
-    Stream<Path> loadAll();
-
-    Path load(String filename);
-
-    Resource loadAsResource(String filename);
-
     void deleteAll();
+
+    void deleteFile(String filePath);
 }

@@ -5,6 +5,7 @@ import Project.ItemCollections.Entities.Item.Tag;
 import Project.ItemCollections.Repositories.CollectionRepository;
 import Project.ItemCollections.Repositories.ItemRepository;
 import Project.ItemCollections.Repositories.TagRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +44,6 @@ public class HomeController {
         List<Collection> largestCollections = new ArrayList<>();
         List<Integer> itemCounts = new ArrayList<>();
         for (Object[] obj: queryObjects) {
-            System.out.println(obj[1].getClass());
             largestCollections.add(collectionRepository.getById( (Integer) obj[0] ));
             itemCounts.add( ((BigInteger)obj[1]).intValue() );
         }
