@@ -6,9 +6,6 @@ import Project.ItemCollections.Repositories.*;
 import Project.ItemCollections.Services.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +23,6 @@ public class CollectionController {
     private CollectionRepository collectionRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private CollectionService collectionService;
 
     @Autowired
@@ -41,16 +35,13 @@ public class CollectionController {
     private FieldTypesRepository fieldTypesRepository;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    private HtmlServiceImpl htmlService;
+    private AuthService authService;
 
     @GetMapping("/collections")
     public ModelAndView getCollectionsPage() {
-        User user = userService.getLoggedUser();
+        User loggedInUser = authService.getLoggedUser();
         ModelAndView modelAndView = new ModelAndView("collections");
-        List<Collection> collectionList = collectionRepository.findByCollectionOwner(user);
+        List<Collection> collectionList = collectionRepository.findByCollectionOwner(loggedInUser);
         modelAndView.addObject("collections", collectionList);
         return modelAndView;
     }
@@ -76,34 +67,34 @@ public class CollectionController {
     }
 
     @GetMapping("/collection/{id}/edit")
-    public ModelAndView editCollectionPage(@PathVariable("id") Integer id) {
+    public ModelAndView editCollectionPage(@PathVariable("id") Integer collectionId) {
         ModelAndView mav = new ModelAndView("collectionEditForm");
-        Collection targetCollection = collectionRepository.getById(id);
+        Collection targetCollection = collectionRepository.getById(collectionId);
         mav.addObject("collection", targetCollection);
         mav.addObject("collectionTopics", collectionTopicsRepository.findAll());
         return mav;
     }
 
     @PostMapping("/collection/{id}/edit")
-    public String editCollection(RedirectAttributes redirectAttributes, @ModelAttribute Collection collection, @RequestParam(value="topicName") String topicName, @PathVariable("id") Integer id) {
-        collectionService.editCollection(collection, id, topicName);
+    public String editCollection(RedirectAttributes redirectAttributes, @ModelAttribute Collection collection, @RequestParam(value="topicName") String topicName, @PathVariable("id") Integer collectionId) {
+        collectionService.editCollection(collection, collectionId, topicName);
         redirectAttributes.addFlashAttribute("message", "Collection has been updated!");
         return "redirect:/collection/{id}/overview";
     }
 
     @GetMapping("/collection/{id}/delete")
-    public String deleteCollection(RedirectAttributes redirectAttributes, @PathVariable("id") Integer id) {
-        collectionService.deleteCollection(id);
+    public String deleteCollection(RedirectAttributes redirectAttributes, @PathVariable("id") Integer collectionId) {
+        collectionService.deleteCollection(collectionId);
         redirectAttributes.addFlashAttribute("message", "Collection has been deleted!");
         return "redirect:/collections";
     }
 
     @GetMapping("/collection/{id}/overview")
-    public ModelAndView collectionOverviewPage(@PathVariable("id") Integer id) {
+    public ModelAndView collectionOverviewPage(@PathVariable("id") Integer collectionId) {
         ModelAndView mav = new ModelAndView("collectionItems");
-        Collection collection = collectionRepository.getById(id);
+        Collection collection = collectionRepository.getById(collectionId);
         mav.addObject("collectionItems", itemRepository.findByItemCollection(collection));
-        mav.addObject("collection", collectionRepository.getById(id));
+        mav.addObject("collection", collection);
         return mav;
     }
 

@@ -3,7 +3,7 @@
 <head>
     <div th:replace="~{fragments/header :: header}"></div>
     <link rel="stylesheet" th:href="@{/css/jqcloud.min.css}" />
-    <title>Registration</title>
+    <title th:text="#{label.main}"></title>
 </head>
 <body class="bg-light">
 <div th:replace="~{fragments/flashMessage :: flashMessage}"></div>
@@ -55,8 +55,6 @@
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
-<script th:src="@{/css/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/css/sidebars.js}"></script>
 <script th:src="@{/js/jqcloud.min.js}"></script>
 
 <script th:inline="javascript">

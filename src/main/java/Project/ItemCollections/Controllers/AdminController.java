@@ -2,9 +2,8 @@ package Project.ItemCollections.Controllers;
 
 import Project.ItemCollections.Repositories.UserRepository;
 import Project.ItemCollections.Services.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,33 +28,37 @@ public class AdminController {
     }
 
     @RequestMapping(value="/admin/editUsers", method = RequestMethod.POST, params="action=block")
-    public String blockUsers(@RequestParam(value="select") List<String> userUsernames) {
+    public String blockUsers(@RequestParam(value="select") List<String> userUsernames, RedirectAttributes redirectAttributes) {
         userService.editUsers(userUsernames, "block");
+        redirectAttributes.addFlashAttribute("message", "Selected users have been blocked!");
         return "redirect:/admin";
     }
 
     @RequestMapping(value="/admin/editUsers", method=RequestMethod.POST, params="action=unblock")
-    public String unblockUsers(@RequestParam(value="select") List<String> userUsernames) {
+    public String unblockUsers(@RequestParam(value="select") List<String> userUsernames, RedirectAttributes redirectAttributes) {
         userService.editUsers(userUsernames, "unblock");
+        redirectAttributes.addFlashAttribute("message", "Selected users have been unblocked!");
         return "redirect:/admin";
     }
 
     @RequestMapping(value="/admin/editUsers", method=RequestMethod.POST, params="action=delete")
-    public String deleteUsers(@RequestParam(value="select") List<String> userUsernames) {
+    public String deleteUsers(@RequestParam(value="select") List<String> userUsernames, RedirectAttributes redirectAttributes) {
         userService.editUsers(userUsernames, "delete");
+        redirectAttributes.addFlashAttribute("message", "Selected users have been deleted!");
         return "redirect:/admin";
     }
 
     @RequestMapping(value="/admin/editUsers", method=RequestMethod.POST, params="action=grantAdmin")
-    public String grantAdminToUsers(@RequestParam(value="select") List<String> userUsernames) {
+    public String grantAdminToUsers(@RequestParam(value="select") List<String> userUsernames, RedirectAttributes redirectAttributes) {
         userService.editUsers(userUsernames, "grantAdmin");
+        redirectAttributes.addFlashAttribute("message", "Added selected users to admin group!");
         return "redirect:/admin";
     }
 
     @RequestMapping(value="/admin/editUsers", method=RequestMethod.POST, params="action=revokeAdmin")
-    public String revokeAdminFromUsers(@RequestParam(value="select") List<String> userUsernames) {
+    public String revokeAdminFromUsers(@RequestParam(value="select") List<String> userUsernames, RedirectAttributes redirectAttributes) {
         userService.editUsers(userUsernames, "revokeAdmin");
-
+        redirectAttributes.addFlashAttribute("message", "Removed selected users from admin group!");
         return "redirect:/admin";
     }
 }

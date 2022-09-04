@@ -1,13 +1,8 @@
 package Project.ItemCollections.Entities.Item;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 public class Tag {
@@ -16,18 +11,11 @@ public class Tag {
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="tag_generator")
     @SequenceGenerator(name="heroku_d95adc693c777bb", sequenceName = "tag_seq")
     private Integer id;
+
     private String tagName;
-    private Integer tagWeight;
+
     @OneToMany(mappedBy = "itemTag")
     private List<ItemTags> items = new ArrayList<>();
-
-    public Integer getTagWeight() {
-        return tagWeight;
-    }
-
-    public void setTagWeight(Integer tagWeight) {
-        this.tagWeight = tagWeight;
-    }
 
     public List<ItemTags> getItems() {
         return items;

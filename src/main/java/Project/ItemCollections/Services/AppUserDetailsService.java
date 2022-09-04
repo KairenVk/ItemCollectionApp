@@ -3,8 +3,8 @@ package Project.ItemCollections.Services;
 import Project.ItemCollections.Entities.User.User;
 import Project.ItemCollections.Security.AppUserDetails;
 import Project.ItemCollections.Repositories.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

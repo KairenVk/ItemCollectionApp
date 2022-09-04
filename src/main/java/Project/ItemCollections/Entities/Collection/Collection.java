@@ -2,12 +2,11 @@ package Project.ItemCollections.Entities.Collection;
 
 import Project.ItemCollections.Entities.Item.Item;
 import Project.ItemCollections.Entities.User.User;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -33,10 +32,10 @@ public class Collection implements Serializable {
     private CollectionTopics collectionTopic;
 
     @OneToMany(mappedBy="collection")
-    private Set<CollectionCustomFieldsData> customFieldsData = new HashSet<>();
+    private List<CollectionsFields> collectionFields = new ArrayList<>();
 
     @OneToMany(mappedBy="itemCollection")
-    private Set<Item> itemsInCollection = new HashSet<>();
+    private List<Item> itemsInCollection = new ArrayList<>();
 
     private String imageUrl;
 
@@ -80,12 +79,12 @@ public class Collection implements Serializable {
         this.collectionTopic = collectionTopic;
     }
 
-    public Set<CollectionCustomFieldsData> getCustomFieldsData() {
-        return customFieldsData;
+    public List<CollectionsFields> getCollectionFields() {
+        return collectionFields;
     }
 
-    public void setCustomFieldsData(Set<CollectionCustomFieldsData> customFieldsData) {
-        this.customFieldsData = customFieldsData;
+    public void setCollectionFields(List<CollectionsFields> collectionFields) {
+        this.collectionFields = collectionFields;
     }
 
     public User getCollectionOwner() {
@@ -96,11 +95,11 @@ public class Collection implements Serializable {
         this.collectionOwner = collectionOwner;
     }
 
-    public Set<Item> getItemsInCollection() {
+    public List<Item> getItemsInCollection() {
         return itemsInCollection;
     }
 
-    public void setItemsInCollection(Set<Item> itemsInCollection) {
+    public void setItemsInCollection(List<Item> itemsInCollection) {
         this.itemsInCollection = itemsInCollection;
     }
 
@@ -108,13 +107,8 @@ public class Collection implements Serializable {
         itemsInCollection.add(item);
     }
 
-    public void addFieldToCollection(CollectionCustomFieldsData customfield) {
-        customFieldsData.add(customfield);
-    }
-    @Override
-    public String toString()
-    {
-        return "Collection{" + "id=" + id + ", user=" + collectionOwner + ", name='" + name + '\'' + ", description='" + description + '\'' + ", collectionTopic=" + collectionTopic + '}';
+    public void addFieldToCollection(CollectionsFields customfield) {
+        collectionFields.add(customfield);
     }
 
 

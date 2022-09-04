@@ -1,8 +1,8 @@
 package Project.ItemCollections.Entities.Collection;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class FieldTypes {
@@ -16,7 +16,7 @@ public class FieldTypes {
     private String nameType;
 
     @OneToMany (mappedBy="fieldType")
-    private Set<CollectionCustomFieldsData> CollectionField = new HashSet<>();
+    private List<CollectionsFields> CollectionField = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -34,11 +34,11 @@ public class FieldTypes {
         this.nameType = nameType;
     }
 
-    public Set<CollectionCustomFieldsData> getCollectionField() {
+    public List<CollectionsFields> getCollectionField() {
         return CollectionField;
     }
 
-    public void setCollectionField(Set<CollectionCustomFieldsData> collectionField) {
+    public void setCollectionField(List<CollectionsFields> collectionField) {
         CollectionField = collectionField;
     }
 }

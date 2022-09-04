@@ -2,11 +2,10 @@ package Project.ItemCollections.Entities.Collection;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 @Entity
-public class CollectionTopics implements Serializable
-{
+public class CollectionTopics implements Serializable {
 
     @Id
     @Column(name="topic_id")
@@ -17,7 +16,7 @@ public class CollectionTopics implements Serializable
     private String topicName;
 
     @OneToMany(mappedBy="collectionTopic")
-    private Set<Collection> topicCollections;
+    private List<Collection> topicCollections;
 
     public Integer getId() {
         return id;
@@ -35,11 +34,11 @@ public class CollectionTopics implements Serializable
         this.topicName = topicName;
     }
 
-    public Set<Collection> getTopicCollections() {
+    public List<Collection> getTopicCollections() {
         return topicCollections;
     }
 
-    public void setTopicCollections(Set<Collection> topicCollections) {
+    public void setTopicCollections(List<Collection> topicCollections) {
         this.topicCollections = topicCollections;
     }
 

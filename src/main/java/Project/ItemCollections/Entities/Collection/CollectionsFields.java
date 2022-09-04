@@ -2,13 +2,12 @@ package Project.ItemCollections.Entities.Collection;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 @Entity
-public class CollectionCustomFieldsData {
+public class CollectionsFields {
 
     @Id
-    @Column(name="customfield_id")
+    @Column(name="collectionfield_id")
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="collectionCustomFieldsData_generator")
     @SequenceGenerator(name="heroku_d95adc693c777bb", sequenceName = "collectionCustomFieldsData_seq")
     private Integer id;
@@ -23,8 +22,8 @@ public class CollectionCustomFieldsData {
     @JoinColumn(name="collection_id", nullable = false)
     private Collection collection;
 
-    @OneToMany (mappedBy="customFieldsData")
-    private List<CollectionItemFields> customField;
+    @OneToMany (mappedBy="collectionField")
+    private List<CollectionsFieldsData> collectionFieldsData;
 
     public Integer getId() {
         return id;
@@ -58,14 +57,12 @@ public class CollectionCustomFieldsData {
         this.collection = collection;
     }
 
-    public List<CollectionItemFields> getCustomField() {
-        return customField;
+    public List<CollectionsFieldsData> getCollectionFieldsData() {
+        return collectionFieldsData;
     }
 
-    public void addCustomField(CollectionItemFields customField) {
-        this.customField.add(customField);
+    public void setCollectionFieldsData(List<CollectionsFieldsData> collectionFieldsData) {
+        this.collectionFieldsData = collectionFieldsData;
     }
-    public void setCustomField(List<CollectionItemFields> customField) {
-        this.customField = customField;
-    }
+
 }

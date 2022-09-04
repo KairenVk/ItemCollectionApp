@@ -9,11 +9,13 @@ import java.util.List;
 
 public interface UsersLikesRepository extends CrudRepository<UsersLikes, Integer> {
 
-    public void deleteByLikedItem(Item item);
+    void deleteByLikedItem(Item item);
 
-    public UsersLikes findByLikedItemAndUserWhoLiked(Item item, User user);
+    UsersLikes findByLikedItemAndUserWhoLiked(Item item, User user);
 
-    public void deleteByLikedItemAndUserWhoLiked(Item item, User user);
+    void deleteByLikedItemAndUserWhoLiked(Item item, User user);
 
-    public List<UsersLikes> findUserWhoLikedByLikedItem(Item item);
+    List<UsersLikes> findUserWhoLikedByLikedItem(Item item);
+
+    void deleteByUserWhoLiked(User user);
 }

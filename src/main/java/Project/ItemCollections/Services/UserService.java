@@ -1,19 +1,21 @@
 package Project.ItemCollections.Services;
 
+import Project.ItemCollections.Entities.Collection.Collection;
 import Project.ItemCollections.Entities.User.Role;
 import Project.ItemCollections.Entities.User.User;
-import Project.ItemCollections.Repositories.RoleRepository;
-import Project.ItemCollections.Repositories.UserRepository;
+import Project.ItemCollections.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserService {
 
     @Autowired
@@ -24,6 +26,15 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UsersLikesRepository usersLikesRepository;
+
+    @Autowired
+    private CollectionService collectionService;
+
+    @Autowired
+    private ItemsCommentsRepository itemsCommentsRepository;
 
     public boolean createUser(User user) {
         if(userRepository.findByUsername(user.getUsername()) != null || userRepository.findByEmail(user.getEmail()) != null) {
@@ -39,17 +50,16 @@ public class UserService {
         return true;
     }
 
-
-    public void updateUser(String username) {
-    }
-
-
     public void deleteUsers(List<String> userUsernames) {
         for (String user: userUsernames) {
             User n = userRepository.findByUsername(user);
             n.setRoles(null);
-            n.setItemLikes(null);
-            n.setOwnedCollections(null);
+            usersLikesRepository.deleteByUserWhoLiked(n);
+            List<Collection> collectionsToRemove = new ArrayList<>(n.getOwnedCollections());
+            for (Collection collection: collectionsToRemove) {
+                collectionService.deleteCollection(collection.getId());
+            }
+            itemsCommentsRepository.deleteByAuthor(n);
             userRepository.delete(n);
         }
     }
@@ -84,13 +94,6 @@ public class UserService {
             SecurityContextHolder.clearContext();
     }
 
-    public User getLoggedUser() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            User loggedInUser = userRepository.findByUsername(((UserDetails) principal).getUsername());
-            return loggedInUser;
-        }
-        return null;
-    }
+
 
 }

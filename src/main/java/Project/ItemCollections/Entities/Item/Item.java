@@ -1,12 +1,9 @@
 package Project.ItemCollections.Entities.Item;
 
 import Project.ItemCollections.Entities.Collection.Collection;
-import Project.ItemCollections.Entities.Collection.CollectionItemFields;
+import Project.ItemCollections.Entities.Collection.CollectionsFieldsData;
 import Project.ItemCollections.Entities.User.User;
 import Project.ItemCollections.Entities.User.UsersLikes;
-import Project.ItemCollections.Repositories.TagRepository;
-import org.hibernate.annotations.Cascade;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,17 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Item implements Serializable
-{
-    @Autowired
-    @Transient
-    private TagRepository tagRepository;
+public class Item implements Serializable {
+
     @Id
     @Column(name="item_id")
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="item_generator")
     @SequenceGenerator(name="heroku_d95adc693c777bb", sequenceName = "item_seq")
     private Integer id;
+
     private String itemName;
+
     @OneToMany(mappedBy="taggedItem")
     private List<ItemTags> itemTags = new ArrayList<>();
 
@@ -43,7 +39,7 @@ public class Item implements Serializable
     private User itemOwner;
 
     @OneToMany(mappedBy="itemId")
-    private List<CollectionItemFields> customItemFields = new ArrayList<>();
+    private List<CollectionsFieldsData> collectionsFieldsData = new ArrayList<>();
 
     private String imageUrl;
     public Integer getId() {
@@ -98,16 +94,16 @@ public class Item implements Serializable
         this.itemOwner = itemOwner;
     }
 
-    public List<CollectionItemFields> getCustomItemFields() {
-        return customItemFields;
+    public List<CollectionsFieldsData> getCollectionsFieldsData() {
+        return collectionsFieldsData;
     }
 
-    public void addCustomItemField(CollectionItemFields customField) {
-        customItemFields.add(customField);
+    public void addCustomItemField(CollectionsFieldsData customField) {
+        collectionsFieldsData.add(customField);
     }
 
-    public void setCustomItemFields(List<CollectionItemFields> customItemFields) {
-        this.customItemFields = customItemFields;
+    public void setCollectionsFieldsData(List<CollectionsFieldsData> collectionsFieldsData) {
+        this.collectionsFieldsData = collectionsFieldsData;
     }
 
     public String getImageUrl() {
@@ -116,10 +112,5 @@ public class Item implements Serializable
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-    @Override
-    public String toString()
-    {
-        return "Item{" + "id=" + id + ", itemName='" + itemName + '\'' + ", itemTags=" + itemTags + ", usersWhoLiked=" + usersWhoLiked + ", comments=" + comments + ", itemCollection=" + itemCollection + ", itemOwner=" + itemOwner + ", customItemFields=" + customItemFields + ", imageUrl='" + imageUrl + '\'' + '}';
     }
 }

@@ -20,8 +20,8 @@
                         <div class="container">
                             <div class="row">
                                 <h2 th:text="${item.itemName}" class="text-center"></h2>
-                                <a sec:authorize="isAuthenticated()" th:if="${!#lists.contains(likes, user)}"class="text-center" th:href="@{/item/{itemId}/overview/likeItem(itemId=${item.id})}"><img th:src="@{/img/like.svg}" th:text="#{label.addLike}"></a>
-                                <a sec:authorize="isAuthenticated()" th:if="${#lists.contains(likes, user)}" class="text-center" th:href="@{/item/{itemId}/overview/dislikeItem(itemId=${item.id})}"><img th:src="@{/img/like.svg}" th:text="#{label.removeLike}"></a>
+                                <a sec:authorize="isAuthenticated()" th:if="${likedByUser == null}"class="text-center" th:href="@{/item/{itemId}/overview/likeItem(itemId=${item.id})}"><img th:src="@{/img/like.svg}" th:text="#{label.addLike}"></a>
+                                <a sec:authorize="isAuthenticated()" th:if="${likedByUser != null}" class="text-center" th:href="@{/item/{itemId}/overview/dislikeItem(itemId=${item.id})}"><img th:src="@{/img/like.svg}" th:text="#{label.removeLike}"></a>
                             </div>
                             <div class="row">
                                 <p class="text-center fs-6 fst-italic">
@@ -37,11 +37,11 @@
                         <span th:text="#{label.itemPageLikes(${#lists.size(likes)})}"></span><br/>
                         <span th:text="#{label.itemPageTags}"></span>
                         <span th:each="tag : ${item.itemTags}" th:text="${tag.itemTag.tagName}+', '"></span><br/><br/>
-                        <span th:block th:each="field : ${item.customItemFields}">
-                            <span th:if="${field.customFieldsData.fieldType.nameType} != 'Boolean'"th:inline="text">[[${field.customFieldsData.name}]]: [[${field.fieldContent}]]</span>
-                            <span th:if="${field.customFieldsData.fieldType.nameType} == 'Boolean'" th:inline="text">[[${field.customFieldsData.name}]]: </span>
-                            <input th:if="${field.customFieldsData.fieldType.nameType} == 'Boolean' and ${field.fieldContent} == '1'" type="checkbox"  checked onclick="return false;">
-                            <input th:if="${field.customFieldsData.fieldType.nameType} == 'Boolean' and ${field.fieldContent} == '0'" type="checkbox" onclick="return false;">
+                        <span th:block th:each="field : ${item.collectionsFieldsData}">
+                            <span th:if="${field.collectionField.fieldType.nameType} != 'Boolean'"th:inline="text">[[${field.collectionField.name}]]: [[${field.fieldContent}]]</span>
+                            <span th:if="${field.collectionField.fieldType.nameType} == 'Boolean'" th:inline="text">[[${field.collectionField.name}]]: </span>
+                            <input th:if="${field.collectionField.fieldType.nameType} == 'Boolean' and ${field.fieldContent} == '1'" type="checkbox"  checked onclick="return false;">
+                            <input th:if="${field.collectionField.fieldType.nameType} == 'Boolean' and ${field.fieldContent} == '0'" type="checkbox" onclick="return false;">
                             <br>
                         </span>
                     </div>
@@ -86,9 +86,6 @@
         </div>
 
         <div th:replace="~{fragments/footer :: footer}"></div>
-
-        <script th:src="@{/css/bootstrap.bundle.min.js}"></script>
-        <script th:src="@{/css/sidebars.js}"></script>
         <script th:src="@{/js/commentsAutorefresh.js}"></script>
     </body>
 </html>

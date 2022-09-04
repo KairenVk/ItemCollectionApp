@@ -1,6 +1,7 @@
 package Project.ItemCollections.Services;
 
 import Project.ItemCollections.Exceptions.StorageException;
+
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -47,5 +48,7 @@ public class FileService {
             throw new StorageException("Wrong file extension " + filename);
         }
     }
-
+    public void deleteFile(String filePath) {
+        storageService.deleteFile(filePath);
+    }
 }

@@ -1,10 +1,12 @@
 package Project.ItemCollections.Services;
 
-import Project.ItemCollections.Entities.Collection.CollectionCustomFieldsData;
-import Project.ItemCollections.Entities.Collection.CollectionItemFields;
+import Project.ItemCollections.Entities.Collection.Collection;
+import Project.ItemCollections.Entities.Collection.CollectionsFields;
+import Project.ItemCollections.Entities.Collection.CollectionsFieldsData;
 import Project.ItemCollections.Entities.Item.Item;
-import Project.ItemCollections.Repositories.CollectionCustomFieldsDataRepository;
-import Project.ItemCollections.Repositories.CollectionItemFieldsRepository;
+import Project.ItemCollections.Repositories.CollectionsFieldsRepository;
+import Project.ItemCollections.Repositories.CollectionsFieldsDataRepository;
+import Project.ItemCollections.Repositories.FieldTypesRepository;
 import Project.ItemCollections.Repositories.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,28 +19,43 @@ import java.util.List;
 public class CustomFieldsService {
 
     @Autowired
-    private CollectionCustomFieldsDataRepository collectionCustomFieldsDataRepository;
+    private CollectionsFieldsRepository collectionsFieldsRepository;
 
     @Autowired
-    private CollectionItemFieldsRepository collectionItemFieldsRepository;
+    private CollectionsFieldsDataRepository collectionsFieldsDataRepository;
 
     @Autowired
     private ItemRepository itemRepository;
 
+    @Autowired
+    private FieldTypesRepository fieldTypesRepository;
+
     public void createItemCustomFields(Item item, List<String> customFieldsNames, List<String> customFieldsValues) {
         for (int i = 0; i < customFieldsNames.size(); i++) {
-            CollectionItemFields newField = new CollectionItemFields();
+            CollectionsFieldsData newField = new CollectionsFieldsData();
             newField.setFieldContent(customFieldsValues.get(i));
             newField.setItemId(item);
-            newField.setCustomFieldsData(collectionCustomFieldsDataRepository.findByNameAndCollectionId(customFieldsNames.get(i), item.getItemCollection().getId()));
-            collectionItemFieldsRepository.save(newField);
+            newField.setCollectionField(collectionsFieldsRepository.findByNameAndCollectionId(customFieldsNames.get(i), item.getItemCollection().getId()));
+            collectionsFieldsDataRepository.save(newField);
             item.addCustomItemField(newField);
             itemRepository.save(item);
         }
     }
 
     public void updateItemCustomFields(Item item, List<String> customFieldsNames, List<String> customFieldsValues) {
-        collectionItemFieldsRepository.deleteByItemId(item);
+        collectionsFieldsDataRepository.deleteByItemId(item);
         createItemCustomFields(item, customFieldsNames, customFieldsValues);
+    }
+
+
+    public void createCollectionCustomFields(List<String> customFields, List<String> fieldNames, Collection n) {
+        for (int i = 0; i < fieldNames.size(); i++) {
+            CollectionsFields field = new CollectionsFields();
+            field.setFieldType(fieldTypesRepository.getByNameType(customFields.get(i)));
+            field.setName(fieldNames.get(i));
+            field.setCollection(n);
+            n.addFieldToCollection(field);
+            collectionsFieldsRepository.save(field);
+        }
     }
 }

@@ -14,9 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @Transactional
@@ -32,9 +30,6 @@ public class ItemService {
     private ItemRepository itemRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private CustomFieldsService customFieldsService;
 
     @Autowired
@@ -44,13 +39,13 @@ public class ItemService {
     private ItemsCommentsRepository itemsCommentsRepository;
 
     @Autowired
-    private UserService userService;
+    private AuthService authService;
 
     @Autowired
     private ItemTagsRepository itemTagsRepository;
 
     @Autowired
-    private CollectionItemFieldsRepository collectionItemFieldsRepository;
+    private CollectionsFieldsDataRepository collectionsFieldsDataRepository;
 
     @Autowired
     private UsersLikesRepository usersLikesRepository;
@@ -88,7 +83,7 @@ public class ItemService {
 
         Item n = new Item();
         Collection itemCollection = collectionRepository.getById(collectionId);
-        User loggedInUser = userService.getLoggedUser();
+        User loggedInUser = authService.getLoggedUser();
         n.setItemOwner(loggedInUser);
         n.setItemCollection(itemCollection);
         n.setItemName(item.getItemName());
@@ -112,7 +107,7 @@ public class ItemService {
     }
 
     public void likeItem(Integer itemId) {
-        User loggedInUser = userService.getLoggedUser();
+        User loggedInUser = authService.getLoggedUser();
         Item item = itemRepository.getById(itemId);
         if(usersLikesRepository.findByLikedItemAndUserWhoLiked(item,loggedInUser) == null) {
             UsersLikes like = new UsersLikes();
@@ -124,14 +119,13 @@ public class ItemService {
     }
 
     public void dislikeItem(Integer itemId) {
-        User loggedInUser = userService.getLoggedUser();
+        User loggedInUser = authService.getLoggedUser();
         Item item = itemRepository.getById(itemId);
         usersLikesRepository.deleteByLikedItemAndUserWhoLiked(item, loggedInUser);
     }
 
     public void addComment(String comment, Integer itemId) {
-        User loggedInUser = userService.getLoggedUser();
-
+        User loggedInUser = authService.getLoggedUser();
         ItemsComments n = new ItemsComments();
         n.setItem(itemRepository.getById(itemId));
         n.setComment(comment);
@@ -139,11 +133,14 @@ public class ItemService {
         itemsCommentsRepository.save(n);
     }
 
-    public void deleteItem(Integer collectionId, Integer itemId) {
+    public void deleteItem(Integer itemId) {
         Item item = itemRepository.getById(itemId);
+        fileService.deleteFile(item.getImageUrl());
         itemTagsRepository.deleteByTaggedItem(item);
-        collectionItemFieldsRepository.deleteByItemId(item);
+        collectionsFieldsDataRepository.deleteByItemId(item);
         usersLikesRepository.deleteByLikedItem(item);
+        itemsCommentsRepository.deleteByItem(item);
         itemRepository.delete(item);
+
     }
 }

@@ -5,10 +5,10 @@ import Project.ItemCollections.Entities.Item.Item;
 import javax.persistence.*;
 
 @Entity
-public class CollectionItemFields {
+public class CollectionsFieldsData {
 
     @Id
-    @Column(name="collectionItemField_id")
+    @Column(name="collectionfielddata_id")
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="collectionItemFields_generator")
     @SequenceGenerator(name="heroku_d95adc693c777bb", sequenceName = "collectionItemFields_seq")
     private Integer id;
@@ -18,8 +18,8 @@ public class CollectionItemFields {
     private Item itemId;
 
     @ManyToOne
-    @JoinColumn(name="customfield_id", nullable = false)
-    private CollectionCustomFieldsData customFieldsData;
+    @JoinColumn(name="collectionfield_id", nullable = false)
+    private CollectionsFields collectionField;
 
     @Column(columnDefinition = "TEXT")
     private String fieldContent;
@@ -40,12 +40,12 @@ public class CollectionItemFields {
         this.itemId = itemId;
     }
 
-    public CollectionCustomFieldsData getCustomFieldsData() {
-        return customFieldsData;
+    public CollectionsFields getCollectionField() {
+        return collectionField;
     }
 
-    public void setCustomFieldsData(CollectionCustomFieldsData customFieldsData) {
-        this.customFieldsData = customFieldsData;
+    public void setCollectionField(CollectionsFields collectionField) {
+        this.collectionField = collectionField;
     }
 
     public String getFieldContent() {
