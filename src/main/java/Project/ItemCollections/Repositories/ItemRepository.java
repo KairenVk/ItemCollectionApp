@@ -3,14 +3,12 @@ package Project.ItemCollections.Repositories;
 import Project.ItemCollections.Entities.Collection.Collection;
 import Project.ItemCollections.Entities.Item.Item;
 import Project.ItemCollections.Entities.User.User;
-
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
 
 @Component
 public interface ItemRepository extends CrudRepository<Item, Integer> {

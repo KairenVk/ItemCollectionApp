@@ -13,7 +13,8 @@
     <div class="row">
         <div class="col-md-3 position-relative"></div>
         <div class="col-md-3 shadow p-2 m-2 bg-body rounded">
-            <img class="img-fluid h-100" th:src="${collection.imageUrl}" th:alt="#{label.imgAlt}">
+            <h2 class="text-center" th:if="${#strings.isEmpty(collection.imageUrl)}" th:text="#{label.missingImage}"></h2>
+            <img th:unless="${#strings.isEmpty(collection.imageUrl)}" th:src="${collection.imageUrl}" alt="Image" class="img-fluid" />
         </div>
         <div class="col-md-3 position-relative shadow m-2 p-2 bg-body rounded align-middle">
             <div class="row">
@@ -26,7 +27,7 @@
             </div>
             <div class="row text-center">
                 <p class="text-center">
-                    <span class = "text-center" th:utext="#{label.collectionPageDesc(${collection.description})}"></span>
+                    <span class = "text-center" th:utext="#{label.collectionPageDesc(${markdownToHtml.markdownToHtml(collection.description)})}"></span>
                 </p>
             </div>
             <div class="row">

@@ -2,13 +2,10 @@ package Project.ItemCollections.Services;
 
 import Project.ItemCollections.Entities.Collection.Collection;
 import Project.ItemCollections.Entities.Item.Item;
-import Project.ItemCollections.Entities.Item.ItemTags;
-import Project.ItemCollections.Entities.Item.Tag;
+import Project.ItemCollections.Entities.Item.ItemsComments;
 import Project.ItemCollections.Entities.User.User;
 import Project.ItemCollections.Entities.User.UsersLikes;
 import Project.ItemCollections.Repositories.*;
-import Project.ItemCollections.Entities.Item.ItemsComments;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +47,9 @@ public class ItemService {
     @Autowired
     private UsersLikesRepository usersLikesRepository;
 
+    @Autowired
+    private TagService tagService;
+
     public void editItem(Item item, Integer itemId, Integer collectionId, List<String> tags, List<String> customFieldsNames, List<String> customFieldsValues, MultipartFile image) {
 
         if (!image.isEmpty()) {
@@ -61,16 +61,7 @@ public class ItemService {
         n.setItemName(item.getItemName());
         String imageUrl = fileService.uploadFile(image, n.getId());
         n.setImageUrl(imageUrl);
-        if(tags != null) {
-            itemTagsRepository.deleteByTaggedItem(n);
-            for (String tag: tags) {
-                Tag newTag = tagRepository.findByTagName(tag);
-                ItemTags itemTag = new ItemTags();
-                itemTag.setTaggedItem(n);
-                itemTag.setItemTag(newTag);
-                itemTagsRepository.save(itemTag);
-            }
-        }
+        tagService.editItemTags(n, tags);
         itemRepository.save(n);
         customFieldsService.updateItemCustomFields(n, customFieldsNames, customFieldsValues);
 
@@ -88,22 +79,13 @@ public class ItemService {
         n.setItemCollection(itemCollection);
         n.setItemName(item.getItemName());
         itemRepository.save(n);
-        if (tags != null) {
-            for (String tag : tags) {
-                Tag m = tagRepository.findByTagName(tag);
-                ItemTags newTag = new ItemTags();
-                newTag.setItemTag(m);
-                newTag.setTaggedItem(n);
-                itemTagsRepository.save(newTag);
-            }
-        }
+        tagService.addTagsToItem(n, tags);
         n.setItemName(item.getItemName());
         String fileUrl = fileService.uploadFile(image, n.getId());
         n.setImageUrl(fileUrl);
         itemRepository.save(n);
         itemCollection.addItemToCollection(n);
-        if(customFieldsNames != null && customFieldsValues != null)
-            customFieldsService.createItemCustomFields(n, customFieldsNames, customFieldsValues);
+        customFieldsService.createItemCustomFields(n, customFieldsNames, customFieldsValues);
     }
 
     public void likeItem(Integer itemId) {
