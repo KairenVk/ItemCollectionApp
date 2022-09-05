@@ -10,7 +10,7 @@ public class CollectionsFieldsData {
     @Id
     @Column(name="collectionfielddata_id")
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="collectionItemFields_generator")
-    @SequenceGenerator(name="heroku_d95adc693c777bb", sequenceName = "collectionItemFields_seq")
+    @SequenceGenerator(name="heroku_4884a911dcd0356", sequenceName = "collectionItemFields_seq")
     private Integer id;
 
     @ManyToOne

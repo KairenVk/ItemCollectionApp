@@ -9,7 +9,7 @@ public class ItemsComments {
     @Id
     @Column(name="itemcomment_id")
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="itemComments_generator")
-    @SequenceGenerator(name="heroku_d95adc693c777bb", sequenceName = "itemComments_seq")
+    @SequenceGenerator(name="heroku_4884a911dcd0356", sequenceName = "itemComments_seq")
     private Integer id;
     @ManyToOne
     @JoinColumn(name="item_id", nullable = false)

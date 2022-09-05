@@ -11,7 +11,7 @@ public class Role implements Serializable {
     @Id
     @Column(name="role_id")
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="role_generator")
-    @SequenceGenerator(name="heroku_d95adc693c777bb", sequenceName = "role_seq")
+    @SequenceGenerator(name="heroku_4884a911dcd0356", sequenceName = "role_seq")
     private Integer id;
 
     private String name;

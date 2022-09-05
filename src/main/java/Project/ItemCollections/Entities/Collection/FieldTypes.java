@@ -10,7 +10,7 @@ public class FieldTypes {
     @Id
     @Column(name="fieldtype_id")
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="fieldTypes_generator")
-    @SequenceGenerator(name="heroku_d95adc693c777bb", sequenceName = "fieldTypes_seq")
+    @SequenceGenerator(name="heroku_4884a911dcd0356", sequenceName = "fieldTypes_seq")
     private Integer id;
 
     private String nameType;

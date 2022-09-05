@@ -9,7 +9,7 @@ public class UsersLikes {
     @Id
     @Column(name="userslikes_id")
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="userLikes_generator")
-    @SequenceGenerator(name="heroku_d95adc693c777bb", sequenceName = "userLikes_seq")
+    @SequenceGenerator(name="heroku_4884a911dcd0356", sequenceName = "userLikes_seq")
     private Integer id;
 
     @ManyToOne

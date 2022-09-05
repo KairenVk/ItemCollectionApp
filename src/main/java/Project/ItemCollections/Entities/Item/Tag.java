@@ -9,7 +9,7 @@ public class Tag {
     @Id
     @Column(name="tag_id")
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="tag_generator")
-    @SequenceGenerator(name="heroku_d95adc693c777bb", sequenceName = "tag_seq")
+    @SequenceGenerator(name="heroku_4884a911dcd0356", sequenceName = "tag_seq")
     private Integer id;
 
     private String tagName;

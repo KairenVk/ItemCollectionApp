@@ -10,7 +10,7 @@ public class CollectionTopics implements Serializable {
     @Id
     @Column(name="topic_id")
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="collectionTopics_generator")
-    @SequenceGenerator(name="heroku_d95adc693c777bb", sequenceName = "collectionTopics_seq")
+    @SequenceGenerator(name="heroku_4884a911dcd0356", sequenceName = "collectionTopics_seq")
     private Integer id;
 
     private String topicName;
