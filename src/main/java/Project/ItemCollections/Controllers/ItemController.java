@@ -80,7 +80,6 @@ public class ItemController {
         {
             latestCommentId = itemsComments.stream().max(Comparator.comparing(ItemsComments::getId)).get().getId(); // Highest comment ID for retrieving new comments purposes
         }
-        System.out.println(itemRepository.getById(id).getImageUrl());
         modelAndView.addObject("item", itemRepository.getById(id));
         modelAndView.addObject("comments", itemsComments);
         modelAndView.addObject("latestCommentId", latestCommentId);

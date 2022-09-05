@@ -100,7 +100,6 @@ public class CollectionController {
         ModelAndView mav = new ModelAndView("collectionItems");
         HtmlServiceImpl markdownToHtml = new HtmlServiceImpl();
         Collection collection = collectionRepository.getById(collectionId);
-        System.out.println(collection.getImageUrl());
         mav.addObject("collectionItems", itemRepository.findByItemCollection(collection));
         mav.addObject("collection", collection);
         mav.addObject("markdownToHtml", markdownToHtml);
