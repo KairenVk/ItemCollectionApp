@@ -4,8 +4,8 @@ import Project.ItemCollections.Entities.Collection.Collection;
 import Project.ItemCollections.Entities.Collection.CollectionsFields;
 import Project.ItemCollections.Entities.Collection.CollectionsFieldsData;
 import Project.ItemCollections.Entities.Item.Item;
-import Project.ItemCollections.Repositories.CollectionsFieldsRepository;
 import Project.ItemCollections.Repositories.CollectionsFieldsDataRepository;
+import Project.ItemCollections.Repositories.CollectionsFieldsRepository;
 import Project.ItemCollections.Repositories.FieldTypesRepository;
 import Project.ItemCollections.Repositories.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +31,16 @@ public class CustomFieldsService {
     private FieldTypesRepository fieldTypesRepository;
 
     public void createItemCustomFields(Item item, List<String> customFieldsNames, List<String> customFieldsValues) {
-        for (int i = 0; i < customFieldsNames.size(); i++) {
-            CollectionsFieldsData newField = new CollectionsFieldsData();
-            newField.setFieldContent(customFieldsValues.get(i));
-            newField.setItemId(item);
-            newField.setCollectionField(collectionsFieldsRepository.findByNameAndCollectionId(customFieldsNames.get(i), item.getItemCollection().getId()));
-            collectionsFieldsDataRepository.save(newField);
-            item.addCustomItemField(newField);
-            itemRepository.save(item);
+        if(customFieldsNames != null && customFieldsValues != null) {
+            for (int i = 0; i < customFieldsNames.size(); i++) {
+                CollectionsFieldsData newField = new CollectionsFieldsData();
+                newField.setFieldContent(customFieldsValues.get(i));
+                newField.setItemId(item);
+                newField.setCollectionField(collectionsFieldsRepository.findByNameAndCollectionId(customFieldsNames.get(i), item.getItemCollection().getId()));
+                collectionsFieldsDataRepository.save(newField);
+                item.addCustomItemField(newField);
+                itemRepository.save(item);
+            }
         }
     }
 

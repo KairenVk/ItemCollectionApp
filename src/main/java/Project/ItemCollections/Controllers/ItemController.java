@@ -7,7 +7,6 @@ import Project.ItemCollections.Entities.Item.ItemsComments;
 import Project.ItemCollections.Repositories.*;
 import Project.ItemCollections.Services.AuthService;
 import Project.ItemCollections.Services.ItemService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -81,6 +80,7 @@ public class ItemController {
         {
             latestCommentId = itemsComments.stream().max(Comparator.comparing(ItemsComments::getId)).get().getId(); // Highest comment ID for retrieving new comments purposes
         }
+        System.out.println(itemRepository.getById(id).getImageUrl());
         modelAndView.addObject("item", itemRepository.getById(id));
         modelAndView.addObject("comments", itemsComments);
         modelAndView.addObject("latestCommentId", latestCommentId);

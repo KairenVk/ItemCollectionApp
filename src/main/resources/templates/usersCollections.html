@@ -28,7 +28,7 @@
             <tr th:each="collection: ${collections}">
                 <td th:text="${collection.id}"></td>
                 <td><a th:href="@{/collection/{collectionId}/overview(collectionId=${collection.id})}" th:text="${collection.name}"></a></td>
-                <td th:utext="${collection.description}"></td>
+                <td th:utext="${markdownToHtml.markdownToHtml(collection.description)}"></td>
                 <td th:text="${collection.collectionTopic.topicName}"></td>
                 <td th:text="${collection.collectionOwner.username}"></td>
                 <td sec:authorize="hasRole('ROLE_ADMIN')">

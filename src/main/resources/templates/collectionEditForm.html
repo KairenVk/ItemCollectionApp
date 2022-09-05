@@ -23,7 +23,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="collectionCreateDescription" class="form-label">Description</label>
-                            <textarea name="description" th:value="${collection.description}" required id="collectionCreateDescription" class="form-control"></textarea>
+                            <textarea name="description" th:text="${T(org.springframework.web.util.HtmlUtils).htmlUnescape(collection.description)}" required id="collectionCreateDescription" class="form-control"></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="Topic" class="form-label">Topic</label>

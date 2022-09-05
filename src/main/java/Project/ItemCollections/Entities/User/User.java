@@ -1,6 +1,5 @@
 package Project.ItemCollections.Entities.User;
 
-import Project.ItemCollections.Entities.Item.Item;
 import Project.ItemCollections.Entities.Collection.Collection;
 import Project.ItemCollections.Entities.Item.ItemsComments;
 import org.hibernate.annotations.LazyCollection;

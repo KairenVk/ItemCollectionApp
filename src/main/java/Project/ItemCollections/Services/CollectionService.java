@@ -1,16 +1,17 @@
 package Project.ItemCollections.Services;
 
 import Project.ItemCollections.Entities.Collection.Collection;
-import Project.ItemCollections.Entities.Collection.CollectionsFields;
 import Project.ItemCollections.Entities.Collection.CollectionTopics;
 import Project.ItemCollections.Entities.Item.Item;
 import Project.ItemCollections.Entities.User.User;
-import Project.ItemCollections.Repositories.*;
-
+import Project.ItemCollections.Repositories.CollectionRepository;
+import Project.ItemCollections.Repositories.CollectionTopicsRepository;
+import Project.ItemCollections.Repositories.CollectionsFieldsRepository;
+import Project.ItemCollections.Repositories.FieldTypesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class CollectionService {
 
     public void createCollection(Collection collection, String topicName, List<String> fieldNames, List<String> customFields, MultipartFile image) {
 
-        if (image != null) {
+        if (!image.isEmpty()) {
             fileService.validateFile(image);
         }
 
@@ -57,7 +58,7 @@ public class CollectionService {
         n.setCollectionOwner(loggedInUser);
         n.setName(collection.getName());
         n.setCollectionTopic(topic);
-        n.setDescription(htmlService.markdownToHtml(collection.getDescription()));
+        n.setDescription(HtmlUtils.htmlEscape(collection.getDescription()));
         collectionRepository.save(n);
         String imageUrl = fileService.uploadFile(image, n.getId());
         n.setImageUrl(imageUrl);
@@ -71,7 +72,7 @@ public class CollectionService {
 
         CollectionTopics topic = collectionTopicsRepository.findByTopicName(topicName);
         Collection n = collectionRepository.getById(id);
-        n.setDescription(collection.getDescription());
+        n.setDescription(HtmlUtils.htmlEscape(collection.getDescription()));
         n.setName(collection.getName());
         n.setCollectionTopic(topic);
         collectionRepository.save(n);

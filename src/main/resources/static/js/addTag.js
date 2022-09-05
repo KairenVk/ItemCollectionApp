@@ -11,7 +11,7 @@ $(document).ready(function () {
         $newDiv += '</div>';
         $tagsDiv.append($newDiv);
         $.getScript('/js/tagAutocomplete.js', addAutocomplete($('.tagInput')));
-        $(this).data("increment", $newid);
+        $(this).data("increment", ++$newid);
 
     });
 

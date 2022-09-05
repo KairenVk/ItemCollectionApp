@@ -12,7 +12,8 @@
             <div class="row">
                 <div class="col-md-6 py-2">
                     <div class="shadow p-2 bg-body rounded">
-                        <img th:src="${item.imageUrl}" alt="Image" class="img-fluid" />
+                        <h2 class="text-center" th:if="${#strings.isEmpty(item.imageUrl)}" th:text="#{label.missingImage}"></h2>
+                        <img th:unless="${#strings.isEmpty(item.imageUrl)}" th:src="${item.imageUrl}" alt="Image" class="img-fluid" />
                     </div>
                 </div>
                 <div class="col-md-6 py-2">

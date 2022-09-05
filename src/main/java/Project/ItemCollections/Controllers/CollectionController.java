@@ -2,9 +2,13 @@ package Project.ItemCollections.Controllers;
 
 import Project.ItemCollections.Entities.Collection.Collection;
 import Project.ItemCollections.Entities.User.User;
-import Project.ItemCollections.Repositories.*;
-import Project.ItemCollections.Services.*;
-
+import Project.ItemCollections.Repositories.CollectionRepository;
+import Project.ItemCollections.Repositories.CollectionTopicsRepository;
+import Project.ItemCollections.Repositories.FieldTypesRepository;
+import Project.ItemCollections.Repositories.ItemRepository;
+import Project.ItemCollections.Services.AuthService;
+import Project.ItemCollections.Services.CollectionService;
+import Project.ItemCollections.Services.HtmlServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,10 +43,12 @@ public class CollectionController {
 
     @GetMapping("/collections")
     public ModelAndView getCollectionsPage() {
+        HtmlServiceImpl markdownToHtml = new HtmlServiceImpl();
         User loggedInUser = authService.getLoggedUser();
         ModelAndView modelAndView = new ModelAndView("collections");
         List<Collection> collectionList = collectionRepository.findByCollectionOwner(loggedInUser);
         modelAndView.addObject("collections", collectionList);
+        modelAndView.addObject("markdownToHtml", markdownToHtml);
         return modelAndView;
     }
 
@@ -92,16 +98,22 @@ public class CollectionController {
     @GetMapping("/collection/{id}/overview")
     public ModelAndView collectionOverviewPage(@PathVariable("id") Integer collectionId) {
         ModelAndView mav = new ModelAndView("collectionItems");
+        HtmlServiceImpl markdownToHtml = new HtmlServiceImpl();
         Collection collection = collectionRepository.getById(collectionId);
+        System.out.println(collection.getImageUrl());
         mav.addObject("collectionItems", itemRepository.findByItemCollection(collection));
         mav.addObject("collection", collection);
+        mav.addObject("markdownToHtml", markdownToHtml);
         return mav;
     }
 
     @GetMapping("/usersCollections")
     public ModelAndView usersCollectionsPage() {
         ModelAndView mav = new ModelAndView("usersCollections");
+        HtmlServiceImpl markdownToHtml = new HtmlServiceImpl();
+        mav.addObject("markdownToHtml", markdownToHtml);
         mav.addObject("collections", collectionRepository.findAll());
+
         return mav;
     }
 }
