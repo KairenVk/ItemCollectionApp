@@ -61,7 +61,7 @@
                         </div>
                         <div th:case="'Boolean'">
                             <label class="form-label" th:text="${customField.collectionField.name}+': '"></label>
-                            <input type="hidden" th:value="${#lists.size(customField) != 0}? @{${customField.fieldContent}} : ''" name="customFieldsValues[]"><input type="checkbox" th:checked="${#lists.size(customField.customField) != 0}? 'checked' : ''" onclick="this.previousSibling.value=1-this.previousSibling.value">
+                            <input type="hidden" th:value="${#lists.size(customField) != 0}? @{${customField.fieldContent}} : ''" name="customFieldsValues[]"><input type="checkbox" th:checked="${#lists.size(customField.customField) != 0}? 'checked' : ''" onclick="this.previousSibling.value=1-this.previousSibling.value" name="customFieldsValues[]">
                         </div>
                         <div th:case="'Text'">
                             <label class="form-label" th:text="${customField.collectionField.name}+': '"></label>
@@ -78,24 +78,21 @@
                         </div>
                         <div th:case="'Integer'">
                             <label class="form-label" th:text="${customField.name}+': '"></label>
-                            <input type="hidden" th:value="${customField.name}"  name="customFieldsNames[]">
                             <input type="number" name="customFieldsValues[]" required>
                             <div class="invalid-feedback" th:text="#{label.requiredField}"></div>
                         </div>
                         <div  th:case="'Date'">
                             <label class="form-label" th:text="${customField.name}+': '"></label>
-                            <input type="hidden" th:value="${customField.name}"  name="customFieldsNames[]">
                             <input type="date" name="customFieldsValues[]" required>
                             <div class="invalid-feedback" th:text="#{label.requiredField}"></div>
                         </div>
                         <div th:case="'Boolean'">
                             <label class="form-label" th:text="${customField.name}+': '"></label>
-                            <input type="hidden" th:value="${customField.name}"  name="customFieldsNames[]">
-                            <input type="hidden" name="customFieldsValues[]"><input type="checkbox" onclick="this.previousSibling.value=1-this.previousSibling.value">
+                            <input type="hidden" name="customFieldsValues[]" value="0">
+                            <input type="checkbox" onclick="this.previousElementSibling.value=1-this.previousElementSibling.value">
                         </div>
                         <div th:case="'Text'">
                             <label class="form-label" th:text="${customField.name}+': '"></label>
-                            <input type="hidden" th:value="${customField.name}"  name="customFieldsNames[]">
                             <textarea name="customFieldsValues[]" required></textarea>
                             <div class="invalid-feedback" th:text="#{label.requiredField}"></div>
                         </div>

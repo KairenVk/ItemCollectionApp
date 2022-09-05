@@ -51,21 +51,16 @@ public class ItemService {
     private TagService tagService;
 
     public void editItem(Item item, Integer itemId, Integer collectionId, List<String> tags, List<String> customFieldsNames, List<String> customFieldsValues, MultipartFile image) {
-
+        Item n = itemRepository.getById(itemId);
         if (!image.isEmpty()) {
             fileService.validateFile(image);
+            String imageUrl = fileService.uploadFile(image, n.getId());
+            n.setImageUrl(imageUrl);
         }
-
-        Item n = itemRepository.getById(itemId);
-
         n.setItemName(item.getItemName());
-        String imageUrl = fileService.uploadFile(image, n.getId());
-        n.setImageUrl(imageUrl);
         tagService.editItemTags(n, tags);
         itemRepository.save(n);
         customFieldsService.updateItemCustomFields(n, customFieldsNames, customFieldsValues);
-
-
     }
     public void createItem(Item item, Integer collectionId, List<String> tags, List<String> customFieldsNames, List<String> customFieldsValues, MultipartFile image) {
         if (!image.isEmpty()) {
